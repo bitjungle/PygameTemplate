@@ -21,14 +21,14 @@ WINDOW_TITLE = 'Your title here'
 SCREEN_BG_COLOR = color.olive # From pygame_template_colors.py
 FPS = 30                      # Frames per second
 
-snake = objects.MovingImage(imagefile='snake.png', 
+snake = objects.Image(imagefile='snake.png', 
                             offset=[1,1])
-text = objects.TextElement(fontfile=None, 
-                           fontsize=48, 
-                           text='The snake is moving!', 
-                           top=400,
-                           left=400,
-                           color=color.lightcoral)
+text = objects.Text(fontfile=None, 
+                    fontsize=48, 
+                    text='The snake is moving!', 
+                    top=400,
+                    left=400,
+                    color=color.lightcoral)
 myrect = objects.Rectangle(top=200,
                            left=400,
                            width=200,
