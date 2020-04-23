@@ -51,7 +51,8 @@ myrect = objects.GameObject(top=200,
                             fill=color.crimson)
 
 running = True # The program will run as long as this variable is true
-
+ball_x = 0
+ball_x_direction = 1
 
 # Main loop ------------------------------------------------------------
 while running:
@@ -63,6 +64,16 @@ while running:
     screen.fill(SCREEN_BG_COLOR)
 
     snake.move() # Moving the snake using the given offset pixels
+    if snake.rect.top + snake.rect.height > DISPLAY_HEIGHT or snake.rect.top < 0:
+        snake.flip_dy()
+    if snake.rect.left + snake.rect.width > DISPLAY_WIDTH or snake.rect.left < 0:
+        snake.flip_dx()
+
+    ball_x += ball_x_direction # Moving the ball
+    ball_y = 300 + 100*math.sin(ball_x*(1/(4*math.pi)))
+    ball.move_to(x=ball_x, y=ball_y)
+    if ball.rect.left + ball.rect.width > DISPLAY_WIDTH or ball_x < 0:
+        ball_x_direction *= -1 # Flip the ball x direction
 
     # Refreshing the screen --------------------------------------------
     # https://www.pygame.org/docs/ref/surface.html#pygame.Surface.blit

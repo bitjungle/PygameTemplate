@@ -57,9 +57,16 @@ class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.
         # TODO groupcollide spritecollide
         return self.rect.colliderect(rect)
 
-    def move(self):
+    def move(self, **kwargs):
         '''Move the object by dx and dy'''
+        if kwargs.get('dx', None): self.dx = kwargs.get('dx')
+        if kwargs.get('dy', None): self.dy = kwargs.get('dy')
         self.rect = self.rect.move((self.dx, self.dy))
+
+    def move_to(self, **kwargs):
+        '''Move the object to x and y'''
+        if kwargs.get('x', None): self.rect.centerx = kwargs.get('x')
+        if kwargs.get('y', None): self.rect.centery = kwargs.get('y')
 
     def flip_dx(self):
         '''Flip the dx value'''
