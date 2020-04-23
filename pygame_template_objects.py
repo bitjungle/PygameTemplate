@@ -22,20 +22,28 @@ class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.
         DEFAULT_DY = 0
 
         self.imagefile = kwargs.get('imagefile', None)
+        self.radius = kwargs.get('radius', None)
 
         if self.imagefile:
-            self.image = pygame.image.load(self.imagefile).convert_alpha()
+            self.surf = pygame.image.load(self.imagefile).convert_alpha()
             if kwargs.get('width', False) and kwargs.get('height', False):
-                self.image = pygame.transform.smoothscale(self.image,
-                                                          (kwargs.get('width'),
-                                                           kwargs.get('height')))
+                self.surf = pygame.transform.smoothscale(self.surf,
+                                                         (kwargs.get('width'),
+                                                          kwargs.get('height')))
         else:
-            self.image = pygame.Surface((kwargs.get('width', DEFAULT_WIDTH), 
+            self.surf = pygame.Surface((kwargs.get('width', DEFAULT_WIDTH), 
                                          kwargs.get('height', DEFAULT_HEIGHT)))
-            self.image.fill(kwargs.get('fill', pygame.SRCALPHA))
+            self.surf.fill(kwargs.get('fill', pygame.SRCALPHA))
 
-        self.rect = self.image.get_rect(top=kwargs.get('top', DEFAULT_TOP), 
-                                        left=kwargs.get('left', DEFAULT_LEFT))
+        self.rect = self.surf.get_rect(top=kwargs.get('top', DEFAULT_TOP),
+                                       left=kwargs.get('left', DEFAULT_LEFT))
+
+        if self.radius:
+            self.surf.fill(pygame.SRCALPHA)
+            pygame.draw.circle(self.surf, kwargs.get('fill', color.gray), 
+                               (self.radius, self.radius), self.radius, 
+                               kwargs.get('border', 1))
+
         self.dx = kwargs.get('dx', DEFAULT_DX)
         self.dy = kwargs.get('dy', DEFAULT_DX)
 
@@ -98,7 +106,7 @@ class Text(GameObject):
         '''TODO'''
         if text is not None: 
             self.text = text
-        self.image = self._font.render(self.text, self.antialias, self.color)
+        self.surf = self._font.render(self.text, self.antialias, self.color)
 
 
 if __name__ == "__main__":

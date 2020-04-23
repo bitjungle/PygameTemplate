@@ -21,7 +21,7 @@ clock = pygame.time.Clock()
 DISPLAY_WIDTH = 800           # pixels
 DISPLAY_HEIGHT = 600          # pixels
 WINDOW_TITLE = 'Your title here'
-SCREEN_BG_COLOR = color.olive # From pygame_template_colors.py
+SCREEN_BG_COLOR = color.lightskyblue # From pygame_template_colors.py
 FPS = 30                      # Frames per second
 
 # https://www.pygame.org/docs/ref/display.html#pygame.display.set_mode
@@ -43,16 +43,24 @@ text = objects.Text(fontfile='Some-Time-Later.ttf',
                     text='The snake is moving!',
                     top=400,
                     left=200,
-                    color=color.lightcoral)
+                    color=color.orangered)
 myrect = objects.GameObject(top=200,
                             left=200,
                             width=200,
                             height=100,
                             fill=color.crimson)
+mycircle = objects.GameObject(radius=100,
+                              width=200,
+                              height=100,
+                              top=150,
+                              left=300,
+                              border=0, 
+                              fill=color.palevioletred)
 
 running = True # The program will run as long as this variable is true
-ball_x = 0
-ball_x_direction = 1
+
+ball_x = 0           # Ball x start position
+ball_x_direction = 1 # Ball x direction speed (px)
 
 # Main loop ------------------------------------------------------------
 while running:
@@ -77,10 +85,11 @@ while running:
 
     # Refreshing the screen --------------------------------------------
     # https://www.pygame.org/docs/ref/surface.html#pygame.Surface.blit
-    screen.blit(myrect.image, myrect.rect) # Drawing the rectangle
-    screen.blit(snake.image, snake.rect)   # Drawing the snake
-    screen.blit(ball.image, ball.rect)     # Drawing the ball
-    screen.blit(text.image, text.rect)     # Drawing the text
+    screen.blit(myrect.surf, myrect.rect) # Drawing the rectangle
+    screen.blit(mycircle.surf, mycircle.rect) # Drawing the circle
+    screen.blit(snake.surf, snake.rect)   # Drawing the snake
+    screen.blit(ball.surf, ball.rect)     # Drawing the ball
+    screen.blit(text.surf, text.rect)     # Drawing the text
 
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
     pygame.display.flip()
