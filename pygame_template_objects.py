@@ -21,19 +21,14 @@ class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.
         DEFAULT_DX = 0
         DEFAULT_DY = 0
 
-        self.imagefile = kwargs.get('imagefile', None)
         self.radius = kwargs.get('radius', None)
+        self.dx = kwargs.get('dx', DEFAULT_DX)
+        self.dy = kwargs.get('dy', DEFAULT_DX)
 
-        if self.imagefile:
-            self.surf = pygame.image.load(self.imagefile).convert_alpha()
-            if kwargs.get('width', False) and kwargs.get('height', False):
-                self.surf = pygame.transform.smoothscale(self.surf,
-                                                         (kwargs.get('width'),
-                                                          kwargs.get('height')))
-        else:
-            self.surf = pygame.Surface((kwargs.get('width', DEFAULT_WIDTH), 
-                                         kwargs.get('height', DEFAULT_HEIGHT)))
-            self.surf.fill(kwargs.get('fill', pygame.SRCALPHA))
+
+        self.surf = pygame.Surface((kwargs.get('width', DEFAULT_WIDTH), 
+                                        kwargs.get('height', DEFAULT_HEIGHT)))
+        self.surf.fill(kwargs.get('fill', pygame.SRCALPHA))
 
         self.rect = self.surf.get_rect(top=kwargs.get('top', DEFAULT_TOP),
                                        left=kwargs.get('left', DEFAULT_LEFT))
@@ -43,9 +38,6 @@ class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.
             pygame.draw.circle(self.surf, kwargs.get('fill', color.gray), 
                                (self.radius, self.radius), self.radius, 
                                kwargs.get('border', 1))
-
-        self.dx = kwargs.get('dx', DEFAULT_DX)
-        self.dy = kwargs.get('dy', DEFAULT_DX)
 
     def set_top(self, pos):
         '''Set top position'''
@@ -83,6 +75,18 @@ class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.
     def flip_dy(self):
         '''Flip the dy'''
         self.dy *= -1
+
+
+class Image(GameObject):
+    '''Image object'''
+    def __init__(self, **kwargs):
+        print('Image(', kwargs, ')')
+        super(Image, self).__init__(**kwargs)
+        self.surf = pygame.image.load(kwargs.get('imagefile')).convert_alpha()
+        if kwargs.get('width', False) and kwargs.get('height', False):
+            self.surf = pygame.transform.smoothscale(self.surf,
+                                                     (kwargs.get('width'),
+                                                      kwargs.get('height')))
 
 class Text(GameObject):
     '''Game text elements'''

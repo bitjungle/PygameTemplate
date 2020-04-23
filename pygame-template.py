@@ -30,10 +30,10 @@ screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 pygame.display.set_caption(WINDOW_TITLE)
 
 # Creating objects -----------------------------------------------------
-snake = objects.GameObject(imagefile='snake.png',
+snake = objects.Image(imagefile='snake.png',
                            dx=1, 
                            dy=1)
-ball = objects.GameObject(imagefile='football.png',
+ball = objects.Image(imagefile='football.png',
                           top=300,
                           left=0,
                           width=50,
