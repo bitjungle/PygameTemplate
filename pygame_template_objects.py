@@ -7,16 +7,29 @@ See http://www.gnu.org/licenses/gpl-3.0.html
 import pygame
 import pygame_template_colors as color
 
-class GameObject(pygame.sprite.Sprite):
+class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.html
     '''Base class for all game objects'''
+    
     def __init__(self, **kwargs):
         print('GameObject(', kwargs, ')')
         super(GameObject, self).__init__()
-        self.image = pygame.Surface((kwargs.get('width', 0), kwargs.get('height', 0)))
-        self.rect = self.image.get_rect()
-        self.rect.top = kwargs.get('top', 0)
-        self.rect.left = kwargs.get('left', 0)
-        self.offset = kwargs.get('offset', [0, 0])
+        DEFAULT_WIDTH = 0
+        DEFAULT_HEIGHT = 0
+        DEFAULT_TOP = 0
+        DEFAULT_LEFT = 0
+        DEFAULT_DX = 0
+        DEFAULT_DY = 0
+        self.imagefile = kwargs.get('imagefile', None)
+        if self.imagefile:
+            self.image = pygame.image.load(self.imagefile)
+        else:
+            self.image = pygame.Surface((kwargs.get('width', DEFAULT_WIDTH), 
+                                         kwargs.get('height', DEFAULT_HEIGHT)))
+            self.image.fill(kwargs.get('fill', pygame.SRCALPHA))
+        self.rect = self.image.get_rect(top=kwargs.get('top', DEFAULT_TOP), 
+                                        left=kwargs.get('left', DEFAULT_LEFT))
+        self.dx = kwargs.get('dx', DEFAULT_DX)
+        self.dy = kwargs.get('dy', DEFAULT_DX)
 
     def set_top(self, pos):
         '''Set top position'''
@@ -37,30 +50,16 @@ class GameObject(pygame.sprite.Sprite):
         return self.rect.colliderect(rect)
 
     def move(self):
-        self.rect = self.rect.move(self.offset)
+        '''Move the object by dx and dy'''
+        self.rect = self.rect.move((self.dx, self.dy))
 
-    def flip_x_offset(self):
-        '''Flip the x value in the offset [x, y] pair'''
-        self.offset[0] *= -1
+    def flip_dx(self):
+        '''Flip the dx value'''
+        self.dx *= -1
 
-    def flip_y_offset(self):
-        '''Flip the y value in the offset [x, y] pair'''
-        self.offset[1] *= -1
-
-class Rectangle(GameObject):
-    '''A rectangular object'''
-    def __init__(self, **kwargs):
-        print('Rectangle(', kwargs, ')')
-        super(Rectangle, self).__init__(**kwargs)
-        self.image.fill(kwargs.get('fill', color.gray))
-
-class Image(GameObject):
-    '''An image object'''
-    def __init__(self, **kwargs):
-        print('Image(', kwargs, ')')
-        super(Image, self).__init__(**kwargs)
-        self.image = pygame.image.load(kwargs.get('imagefile', None))
-        self.rect = self.image.get_rect()
+    def flip_dy(self):
+        '''Flip the dy'''
+        self.dy *= -1
 
 class Text(GameObject):
     '''Game text elements'''
@@ -75,7 +74,7 @@ class Text(GameObject):
         except OSError as err:
             self._font = pygame.font.SysFont('courier', self.fontsize)
 
-        self.color = kwargs.get('color', (0,0,0))
+        self.color = kwargs.get('color', (0, 0, 0))
         self.text = kwargs.get('text', '')
         self.antialias = kwargs.get('antialias', True)
         self.render(self.text)
