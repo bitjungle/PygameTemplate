@@ -1,7 +1,7 @@
 ''' Pygame Template Objects
 
 Copyright (C) 2020 BITJUNGLE Rune Mathisen
-This code is licensed under a GPLv3 license 
+This code is licensed under a GPLv3 license
 See http://www.gnu.org/licenses/gpl-3.0.html 
 '''
 import pygame
@@ -9,29 +9,31 @@ import pygame_template_colors as color
 
 class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.html
     '''Base class for all game objects'''
-    
+
     def __init__(self, **kwargs):
         print('GameObject(', kwargs, ')')
         super(GameObject, self).__init__()
+
         DEFAULT_WIDTH = 0
         DEFAULT_HEIGHT = 0
         DEFAULT_TOP = 0
         DEFAULT_LEFT = 0
         DEFAULT_DX = 0
         DEFAULT_DY = 0
+
         self.imagefile = kwargs.get('imagefile', None)
 
         if self.imagefile:
             self.image = pygame.image.load(self.imagefile).convert_alpha()
             if kwargs.get('width', False) and kwargs.get('height', False):
                 self.image = pygame.transform.smoothscale(self.image,
-                                                         (kwargs.get('width'),
-                                                          kwargs.get('height')))
+                                                          (kwargs.get('width'),
+                                                           kwargs.get('height')))
         else:
             self.image = pygame.Surface((kwargs.get('width', DEFAULT_WIDTH), 
                                          kwargs.get('height', DEFAULT_HEIGHT)))
             self.image.fill(kwargs.get('fill', pygame.SRCALPHA))
-        
+
         self.rect = self.image.get_rect(top=kwargs.get('top', DEFAULT_TOP), 
                                         left=kwargs.get('left', DEFAULT_LEFT))
         self.dx = kwargs.get('dx', DEFAULT_DX)
@@ -72,7 +74,7 @@ class Text(GameObject):
     def __init__(self, **kwargs):
         print('Text(', kwargs, ')')
         super(Text, self).__init__(**kwargs)
-        self.fontfile = kwargs.get('fontfile', 'Some-Time-Later.ttf')
+        self.fontfile = kwargs.get('fontfile', None)
         self.fontsize = kwargs.get('fontsize', 24)
         
         try: 

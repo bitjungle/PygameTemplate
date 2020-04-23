@@ -38,11 +38,11 @@ ball = objects.GameObject(imagefile='football.png',
                           left=0,
                           width=50,
                           height=50)
-text = objects.Text(fontfile=None,
+text = objects.Text(fontfile='Some-Time-Later.ttf',
                     fontsize=48,
                     text='The snake is moving!',
                     top=400,
-                    left=400,
+                    left=200,
                     color=color.lightcoral)
 myrect = objects.GameObject(top=200,
                             left=200,
