@@ -21,7 +21,6 @@ class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.
         DEFAULT_DX = 0
         DEFAULT_DY = 0
 
-        self.radius = kwargs.get('radius', None)
         self.dx = kwargs.get('dx', DEFAULT_DX)
         self.dy = kwargs.get('dy', DEFAULT_DX)
 
@@ -33,11 +32,6 @@ class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.
         self.rect = self.surf.get_rect(top=kwargs.get('top', DEFAULT_TOP),
                                        left=kwargs.get('left', DEFAULT_LEFT))
 
-        if self.radius:
-            self.surf.fill(pygame.SRCALPHA)
-            pygame.draw.circle(self.surf, kwargs.get('fill', color.gray), 
-                               (self.radius, self.radius), self.radius, 
-                               kwargs.get('border', 1))
 
     def set_top(self, pos):
         '''Set top position'''
@@ -76,6 +70,11 @@ class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.
         '''Flip the dy'''
         self.dy *= -1
 
+class Rectangle(GameObject):
+    '''Rectangle object'''
+    def __init__(self, **kwargs):
+        print('Rectangle(', kwargs, ')')
+        super(Rectangle, self).__init__(**kwargs)
 
 class Image(GameObject):
     '''Image object'''
@@ -87,6 +86,18 @@ class Image(GameObject):
             self.surf = pygame.transform.smoothscale(self.surf,
                                                      (kwargs.get('width'),
                                                       kwargs.get('height')))
+
+class Circle(GameObject):
+    '''Circle object'''
+    def __init__(self, **kwargs):
+        print('Circle(', kwargs, ')')
+        super(Circle, self).__init__(**kwargs)
+        self.radius = kwargs.get('radius', kwargs.get('width', 2) // 2)
+
+        self.surf.fill(pygame.SRCALPHA)
+        pygame.draw.circle(self.surf, kwargs.get('fill', color.gray), 
+                            (self.radius, self.radius), self.radius, 
+                            kwargs.get('border', 1))
 
 class Text(GameObject):
     '''Game text elements'''

@@ -44,18 +44,18 @@ text = objects.Text(fontfile='Some-Time-Later.ttf',
                     top=400,
                     left=200,
                     color=color.orangered)
-myrect = objects.GameObject(top=200,
-                            left=200,
-                            width=200,
-                            height=100,
-                            fill=color.crimson)
-mycircle = objects.GameObject(radius=100,
-                              width=200,
-                              height=100,
-                              top=150,
-                              left=300,
-                              border=0, 
-                              fill=color.palevioletred)
+myrect = objects.Rectangle(top=200,
+                           left=200,
+                           width=200,
+                           height=100,
+                           fill=color.crimson)
+mycircle = objects.Circle(radius=100,
+                          width=200,
+                          height=100,
+                          top=150,
+                          left=300,
+                          border=0, 
+                          fill=color.palevioletred)
 
 running = True # The program will run as long as this variable is true
 
