@@ -33,6 +33,11 @@ pygame.display.set_caption(WINDOW_TITLE)
 snake = objects.GameObject(imagefile='snake.png',
                            dx=1, 
                            dy=1)
+ball = objects.GameObject(imagefile='football.png',
+                          top=300,
+                          left=0,
+                          width=50,
+                          height=50)
 text = objects.Text(fontfile=None,
                     fontsize=48,
                     text='The snake is moving!',
@@ -61,9 +66,10 @@ while running:
 
     # Refreshing the screen --------------------------------------------
     # https://www.pygame.org/docs/ref/surface.html#pygame.Surface.blit
-    screen.blit(myrect.image, myrect.rect)     # Drawing the rectangle
-    screen.blit(snake.image, snake.rect)       # Drawing the snake
-    screen.blit(text.image, text.rect)         # Drawing the text
+    screen.blit(myrect.image, myrect.rect) # Drawing the rectangle
+    screen.blit(snake.image, snake.rect)   # Drawing the snake
+    screen.blit(ball.image, ball.rect)     # Drawing the ball
+    screen.blit(text.image, text.rect)     # Drawing the text
 
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
     pygame.display.flip()

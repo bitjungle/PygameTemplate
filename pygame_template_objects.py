@@ -20,12 +20,18 @@ class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.
         DEFAULT_DX = 0
         DEFAULT_DY = 0
         self.imagefile = kwargs.get('imagefile', None)
+
         if self.imagefile:
-            self.image = pygame.image.load(self.imagefile)
+            self.image = pygame.image.load(self.imagefile).convert_alpha()
+            if kwargs.get('width', False) and kwargs.get('height', False):
+                self.image = pygame.transform.smoothscale(self.image,
+                                                         (kwargs.get('width'),
+                                                          kwargs.get('height')))
         else:
             self.image = pygame.Surface((kwargs.get('width', DEFAULT_WIDTH), 
                                          kwargs.get('height', DEFAULT_HEIGHT)))
             self.image.fill(kwargs.get('fill', pygame.SRCALPHA))
+        
         self.rect = self.image.get_rect(top=kwargs.get('top', DEFAULT_TOP), 
                                         left=kwargs.get('left', DEFAULT_LEFT))
         self.dx = kwargs.get('dx', DEFAULT_DX)
