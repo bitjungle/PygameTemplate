@@ -8,7 +8,23 @@ import pygame
 import pygame_template_colors as color
 
 class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.html
-    '''Base class for all game objects'''
+    '''Base class for all game objects
+
+    Extends the pygame.sprite.Sprite class. Base class for visible game objects.
+
+    Args:
+        width (int): Rect width in pixels
+        height (int): Rect height in pixels
+        top (int): Top position (optional, default pos is 0)
+        left (int): Left position (optional, default pos is 0)
+        fill (pygame.Color): Object fill color (optional, default is transparent)
+
+    Attributes:
+        surf (Surface): object for representing images
+        rect (Rect): object for storing rectangular coordinates
+        dx (int): Number of pixels to move object in x direction for each move()
+        dy (int): Number of pixels to move object in y direction for each move()
+    '''
 
     def __init__(self, **kwargs):
         print('GameObject(', kwargs, ')')
@@ -24,14 +40,11 @@ class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.
         self.dx = kwargs.get('dx', DEFAULT_DX)
         self.dy = kwargs.get('dy', DEFAULT_DX)
 
-
         self.surf = pygame.Surface((kwargs.get('width', DEFAULT_WIDTH), 
-                                        kwargs.get('height', DEFAULT_HEIGHT)))
+                                    kwargs.get('height', DEFAULT_HEIGHT)))
         self.surf.fill(kwargs.get('fill', pygame.SRCALPHA))
-
         self.rect = self.surf.get_rect(top=kwargs.get('top', DEFAULT_TOP),
                                        left=kwargs.get('left', DEFAULT_LEFT))
-
 
     def set_top(self, pos):
         '''Set top position'''
@@ -67,17 +80,51 @@ class GameObject(pygame.sprite.Sprite):# https://www.pygame.org/docs/ref/sprite.
         self.dx *= -1
 
     def flip_dy(self):
-        '''Flip the dy'''
+        '''Flip the dy value'''
         self.dy *= -1
 
 class Rectangle(GameObject):
-    '''Rectangle object'''
+    '''Rectangular object
+    
+    Class for creating rectangular objects.
+
+    Args:
+        width (int): Rect width in pixels
+        height (int): Rect height in pixels
+        top (int): Top position (optional, default pos is 0)
+        left (int): Left position (optional, default pos is 0)
+        fill (pygame.Color): Object fill color (optional, default is transparent)
+
+    Attributes:
+        surf (Surface): object for representing images
+        rect (Rect): object for storing rectangular coordinates
+        dx (int): Number of pixels to move object in x direction for each move()
+        dy (int): Number of pixels to move object in y direction for each move()
+    '''
+
     def __init__(self, **kwargs):
         print('Rectangle(', kwargs, ')')
         super(Rectangle, self).__init__(**kwargs)
 
 class Image(GameObject):
-    '''Image object'''
+    '''Image object
+    
+    Create an image object
+
+    Args:
+        imagefile (str): Image path/filename
+        width (int): Image width (optional, will scale the image)
+        height (int): Image height (optional, will scale the image)
+        top (int): Top position (optional, default pos is 0)
+        left (int): Left position (optional, default pos is 0)
+
+    Attributes:
+        surf (Surface): object for representing images
+        rect (Rect): object for storing rectangular coordinates
+        dx (int): Number of pixels to move object in x direction for each move()
+        dy (int): Number of pixels to move object in y direction for each move()
+    '''
+    
     def __init__(self, **kwargs):
         print('Image(', kwargs, ')')
         super(Image, self).__init__(**kwargs)
@@ -88,7 +135,27 @@ class Image(GameObject):
                                                       kwargs.get('height')))
 
 class Circle(GameObject):
-    '''Circle object'''
+    '''Circle object
+    
+    Class for creating circular objects.
+
+    Args:
+        width (int): Rect width in pixels
+        height (int): Rect height in pixels
+        radius (int): Circle radius (optional)
+        top (int): Top position (optional, default pos is 0)
+        left (int): Left position (optional, default pos is 0)
+        fill (pygame.Color): Circle/border fill color (optional, default is gray)
+        border (int): Border width. A value of 0 will fill the circle
+
+    Attributes:
+        surf (Surface): object for representing images
+        rect (Rect): object for storing rectangular coordinates
+        dx (int): Number of pixels to move object in x direction for each move()
+        dy (int): Number of pixels to move object in y direction for each move()
+        radius (int): Circle radius
+    '''
+
     def __init__(self, **kwargs):
         print('Circle(', kwargs, ')')
         super(Circle, self).__init__(**kwargs)
@@ -100,7 +167,26 @@ class Circle(GameObject):
                             kwargs.get('border', 1))
 
 class Text(GameObject):
-    '''Game text elements'''
+    '''Text element
+    
+    Text element
+
+    Args:
+        text (str): The text to display
+        top (int): Top position (optional, default pos is 0)
+        left (int): Left position (optional, default pos is 0)
+        fontfile (str): 
+        fontsize (int): 
+        antialias (bool): Turn antialias on/off
+        fontcolor (pygame.Color): Font color
+
+    Attributes:
+        surf (Surface): object for representing images
+        rect (Rect): object for storing rectangular coordinates
+        dx (int): Number of pixels to move object in x direction for each move()
+        dy (int): Number of pixels to move object in y direction for each move()
+    '''
+
     def __init__(self, **kwargs):
         print('Text(', kwargs, ')')
         super(Text, self).__init__(**kwargs)
@@ -112,7 +198,7 @@ class Text(GameObject):
         except OSError as err:
             self._font = pygame.font.SysFont('courier', self.fontsize)
 
-        self.color = kwargs.get('color', (0, 0, 0))
+        self.color = kwargs.get('fontcolor', (0, 0, 0))
         self.text = kwargs.get('text', '')
         self.antialias = kwargs.get('antialias', True)
         self.render(self.text)

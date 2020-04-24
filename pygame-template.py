@@ -31,19 +31,19 @@ pygame.display.set_caption(WINDOW_TITLE)
 
 # Creating objects -----------------------------------------------------
 snake = objects.Image(imagefile='snake.png',
-                           dx=1, 
-                           dy=1)
+                      dx=1, 
+                      dy=1)
 ball = objects.Image(imagefile='football.png',
-                          top=300,
-                          left=0,
-                          width=50,
-                          height=50)
+                     top=300,
+                     left=0,
+                     width=50,
+                     height=50)
 text = objects.Text(fontfile='Some-Time-Later.ttf',
                     fontsize=48,
                     text='The snake is moving!',
                     top=400,
                     left=200,
-                    color=color.orangered)
+                    fontcolor=color.orangered)
 myrect = objects.Rectangle(top=200,
                            left=200,
                            width=200,
