@@ -18,11 +18,11 @@ pygame.init()
 clock = pygame.time.Clock()
 
 # Screen settings ------------------------------------------------------
-DISPLAY_WIDTH = 1024 # pixels
-DISPLAY_HEIGHT = 768 # pixels
+DISPLAY_WIDTH = 800  # pixels
+DISPLAY_HEIGHT = 600 # pixels
 WINDOW_TITLE = 'Your title here'
 SCREEN_BG_COLOR = color.lightskyblue # From pygame_template_colors.py
-FPS = 30                      # Frames per second
+FPS = 30             # Frames per second
 
 # https://www.pygame.org/docs/ref/display.html#pygame.display.set_mode
 screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
@@ -87,17 +87,14 @@ while running:
 
     snake.move() # Moving the snake using the given offset pixels
     if snake.rect.top + snake.rect.height > DISPLAY_HEIGHT or snake.rect.top < 0:
-        print(snake.rect.top, '+', snake.rect.height)
         snake.flip_dy()
     if snake.rect.left + snake.rect.width > DISPLAY_WIDTH or snake.rect.left < 0:
-        print(snake.rect.left, '+', snake.rect.width)
         snake.flip_dx()
 
     ball_x += ball_x_direction # Moving the ball
     ball_y = 300 + 100*math.sin(ball_x*(1/(4*math.pi)))
     ball.move_to(x=ball_x, y=ball_y)
     if ball.rect.left + ball.rect.width > DISPLAY_WIDTH or ball_x < 0:
-        print(ball.rect.left, '+', ball.rect.width)
         ball_x_direction *= -1 # Flip the ball x direction
 
     # Refreshing the screen --------------------------------------------
