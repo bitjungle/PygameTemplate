@@ -133,6 +133,7 @@ class Image(GameObject):
             self.surf = pygame.transform.smoothscale(self.surf,
                                                      (kwargs.get('width'),
                                                       kwargs.get('height')))
+        self.rect = self.surf.get_rect()
 
 class Circle(GameObject):
     '''Circle object

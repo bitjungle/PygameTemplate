@@ -18,8 +18,8 @@ pygame.init()
 clock = pygame.time.Clock()
 
 # Screen settings ------------------------------------------------------
-DISPLAY_WIDTH = 800           # pixels
-DISPLAY_HEIGHT = 600          # pixels
+DISPLAY_WIDTH = 1024 # pixels
+DISPLAY_HEIGHT = 768 # pixels
 WINDOW_TITLE = 'Your title here'
 SCREEN_BG_COLOR = color.lightskyblue # From pygame_template_colors.py
 FPS = 30                      # Frames per second
@@ -38,9 +38,9 @@ ball = objects.Image(imagefile='football.png',
                      left=0,
                      width=50,
                      height=50)
-mysword = objects.Image(imagefile='sword.png',
-                        width=25,
-                        height=25)
+sword = objects.Image(imagefile='sword.png',
+                      width=25,
+                      height=25)
 text = objects.Text(fontfile='Some-Time-Later.ttf',
                     fontsize=48,
                     text='The snake is moving!',
@@ -60,12 +60,18 @@ mycircle = objects.Circle(radius=100,
                           border=0, 
                           fill=color.palevioletred)
 
-mymouse = objects.MousePointer(mysword)
 
-running = True # The program will run as long as this variable is true
+mymouse = objects.MousePointer(sword)
+black_holes = []
+def make_black_hole(x, y, rad):
+    return objects.Circle(radius=rad, width=rad*2, height=rad*2, 
+                         fill=color.black, top=y-rad*2, left=x-rad*2,
+                         border=0)
 
 ball_x = 0           # Ball x start position
 ball_x_direction = 1 # Ball x direction speed (px)
+
+running = True # The program will run as long as this variable is true
 
 # Main loop ------------------------------------------------------------
 while running:
@@ -74,30 +80,35 @@ while running:
         if event.type == pygame.QUIT: 
             running = False # Exiting the main loop
         if event.type == pygame.MOUSEBUTTONUP:
-            pos = pygame.mouse.get_pos()
-            print('Mouse pos:', pos)
+            pos = pygame.mouse.get_pos() # Get pos when user release button
+            black_holes.append(make_black_hole(pos[0], pos[1], 10))
 
-    screen.fill(SCREEN_BG_COLOR)
+    screen.fill(SCREEN_BG_COLOR) # Clear the screen
 
     snake.move() # Moving the snake using the given offset pixels
     if snake.rect.top + snake.rect.height > DISPLAY_HEIGHT or snake.rect.top < 0:
+        print(snake.rect.top, '+', snake.rect.height)
         snake.flip_dy()
     if snake.rect.left + snake.rect.width > DISPLAY_WIDTH or snake.rect.left < 0:
+        print(snake.rect.left, '+', snake.rect.width)
         snake.flip_dx()
 
     ball_x += ball_x_direction # Moving the ball
     ball_y = 300 + 100*math.sin(ball_x*(1/(4*math.pi)))
     ball.move_to(x=ball_x, y=ball_y)
     if ball.rect.left + ball.rect.width > DISPLAY_WIDTH or ball_x < 0:
+        print(ball.rect.left, '+', ball.rect.width)
         ball_x_direction *= -1 # Flip the ball x direction
 
     # Refreshing the screen --------------------------------------------
     # https://www.pygame.org/docs/ref/surface.html#pygame.Surface.blit
-    screen.blit(myrect.surf, myrect.rect) # Drawing the rectangle
+    screen.blit(myrect.surf, myrect.rect)     # Drawing the rectangle
     screen.blit(mycircle.surf, mycircle.rect) # Drawing the circle
-    screen.blit(snake.surf, snake.rect)   # Drawing the snake
-    screen.blit(ball.surf, ball.rect)     # Drawing the ball
-    screen.blit(text.surf, text.rect)     # Drawing the text
+    screen.blit(snake.surf, snake.rect)       # Drawing the snake
+    screen.blit(ball.surf, ball.rect)         # Drawing the ball
+    screen.blit(text.surf, text.rect)         # Drawing the text
+    for b in black_holes: # Draw all the black holes we have made so far
+        screen.blit(b.surf, b.rect)
 
     mymouse.update()
     screen.blit(mymouse.obj.surf, mymouse.obj.rect)
