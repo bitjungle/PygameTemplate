@@ -209,6 +209,30 @@ class Text(GameObject):
             self.text = text
         self.surf = self._font.render(self.text, self.antialias, self.color)
 
+class MousePointer(pygame.sprite.Sprite):
+    ''' Mouse pointer 
+
+    Args:
+        obj (GameObject): A game object used for the mouse pointer (optional)
+
+    Attributes:
+        obj.surf (Surface): object for representing images
+        obj.rect (Rect): object for storing rectangular coordinates
+    '''
+    def __init__(self, obj=None):
+        """ Create the player image. """
+        super().__init__()
+        if obj:
+            self.obj = obj
+            pygame.mouse.set_visible(False)
+        else:
+            self.obj = GameObject()
+            pygame.mouse.set_cursor(*pygame.cursors.broken_x)
+ 
+    def update(self):
+        """Set the object to be where the mouse is. """
+        pos = pygame.mouse.get_pos()
+        self.obj.move_to(x=pos[0], y=pos[1])
 
 if __name__ == "__main__":
     pass

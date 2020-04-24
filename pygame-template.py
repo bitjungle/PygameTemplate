@@ -38,6 +38,9 @@ ball = objects.Image(imagefile='football.png',
                      left=0,
                      width=50,
                      height=50)
+mysword = objects.Image(imagefile='sword.png',
+                        width=25,
+                        height=25)
 text = objects.Text(fontfile='Some-Time-Later.ttf',
                     fontsize=48,
                     text='The snake is moving!',
@@ -57,6 +60,8 @@ mycircle = objects.Circle(radius=100,
                           border=0, 
                           fill=color.palevioletred)
 
+mymouse = objects.MousePointer(mysword)
+
 running = True # The program will run as long as this variable is true
 
 ball_x = 0           # Ball x start position
@@ -68,6 +73,9 @@ while running:
         # https://www.pygame.org/docs/ref/event.html
         if event.type == pygame.QUIT: 
             running = False # Exiting the main loop
+        if event.type == pygame.MOUSEBUTTONUP:
+            pos = pygame.mouse.get_pos()
+            print('Mouse pos:', pos)
 
     screen.fill(SCREEN_BG_COLOR)
 
@@ -90,6 +98,9 @@ while running:
     screen.blit(snake.surf, snake.rect)   # Drawing the snake
     screen.blit(ball.surf, ball.rect)     # Drawing the ball
     screen.blit(text.surf, text.rect)     # Drawing the text
+
+    mymouse.update()
+    screen.blit(mymouse.obj.surf, mymouse.obj.rect)
 
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
     pygame.display.flip()
