@@ -1,6 +1,4 @@
-''' Pygame template
-
-A pygame template to get my students quickly up and running.
+''' Pygame demo growing snake
 
 Copyright (C) 2020 BITJUNGLE Rune Mathisen
 This code is licensed under a GPLv3 license 
@@ -9,9 +7,10 @@ See http://www.gnu.org/licenses/gpl-3.0.html
 import pygame
 import sys
 import math
-import random 
+import random
 
 # ----------- Game classes -----------
+sys.path.append('..') # Location of game classes, adjust as necessary
 import pygame_template_colors as color
 import pygame_template_objects as objects
 
@@ -23,43 +22,43 @@ clock = pygame.time.Clock()
 # ----------- Game window properties -----------
 DISPLAY_WIDTH = 800           # pixels
 DISPLAY_HEIGHT = 600          # pixels
-WINDOW_TITLE = 'Your Title Here'
-SCREEN_BG_COLOR = color.black # From pygame_template_colors.py
+WINDOW_TITLE = 'Growing snake'
+SCREEN_BG_COLOR = color.olive # From pygame_template_colors.py
 FPS = 30                      # Frames per second
 
 # ----------- Preparing game window -----------
-screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+screen = pygame.display.set_mode((DISPLAY_WIDTH,DISPLAY_HEIGHT))
 pygame.display.set_caption(WINDOW_TITLE)
 
-running = True # The program will run as long as this variable is true
+snake = objects.GameImage(imagefile='snake.png', 
+                          offset=[1, 1], 
+                          width=40, height=40)
+text = objects.GameTextElement(fontfile=None, fontsize=48, 
+                               text='The snake is growing!', 
+                               top=400, left=400,
+                               offset=[-1, 0],
+                               color=color.lightcoral)
 
-# ----------- Preparing game objects -----------
-# Your code here
-#
+running = True # The program will run as long as this variable is true
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
         if event.type == pygame.QUIT: 
             running = False # Exiting the main loop
-        else:
-            print('Unhandled event', event)
 
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
-    # ----------- Implement game code here -----------
-    # Your code here
-    #
+    snake.move() # Moving the snake using the given offset pixels
+    snake.grow(10, 10)
+    text.move()  # Moving the text using the given offset pixels
 
-    # ----------- Drawing game objects -----------
-    # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    #
+    screen.blit(text.image, text.rect)     # Drawing the text
+    screen.blit(snake.image, snake.rect)   # Drawing the snake
 
-    # Update the full display Surface to the screen
-    # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
     pygame.display.flip()
     clock.tick(FPS)
 
-# ----------- Exiting... -----------
+# Exiting...
 pygame.quit() # https://www.pygame.org/docs/ref/pygame.html#pygame.quit
 sys.exit()    # https://docs.python.org/3.8/library/sys.html#sys.exit
