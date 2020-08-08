@@ -9,7 +9,7 @@ import sys
 import math
 import random
 
-# ----------- Game classes -----------
+# -- Game classes ------------------------------------------------------
 sys.path.append('..') # Location of game classes, adjust as necessary
 import pygame_template_colors as color
 import pygame_template_objects as objects
@@ -40,28 +40,30 @@ for _ in range(NUM_BALLS):
     yoffset = random.randint(1, 10)
     # Create all ball objects and add them to a sprite group
     ballgroup.add(objects.GameImage(imagefile='ball.png',
-                                    width=40, height=40,
+                                    width=50, height=50,
                                     top=xoffset*50, left=yoffset*50, 
-                                    offset=[xoffset, yoffset])) 
+                                    dx=xoffset, dy=yoffset)) 
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
         if event.type == pygame.QUIT: 
             running = False # Exiting the main loop
+        else:
+            print('Unhandled event', event)
 
     screen.fill(SCREEN_BG_COLOR) # Blanking the screen
 
     for ball in ballgroup:
         # check if the square is touching any edge of the window
         if ball.get_bottom() > DISPLAY_HEIGHT or ball.get_top() < 0:
-            ball.flip_vert() # change y direction
+            ball.flip_dy() # change y direction
         if ball.get_right() > DISPLAY_WIDTH or ball.get_left() < 0:
-            ball.flip_horiz() # change x direction
+            ball.flip_dx() # change x direction
         
         ball.collidegroup(ballgroup) # check for collisions within the group
 
         ball.move() # move the ball with the given offset
-        screen.blit(ball.image, ball.rect)
+        screen.blit(ball.surf, ball.rect)
 
     ballgroup.update()
 

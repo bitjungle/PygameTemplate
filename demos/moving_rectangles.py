@@ -9,8 +9,8 @@ import sys
 import math
 import random
 
-# ----------- Game classes -----------
-sys.path.append('..')
+# -- Game classes ------------------------------------------------------
+sys.path.append('..') # Location of game classes, adjust as necessary
 import pygame_template_colors as color
 import pygame_template_objects as objects
 
@@ -35,29 +35,34 @@ running = True # The program will run as long as this variable is true
 # ----------- Preparing game objects -----------
 sq = objects.GameRectangle(top=100, left=100, 
                            width=20, height=20,
-                           offset=[6, 4], fill=color.crimson)
+                           dx=6, dy=4, 
+                           fill=color.crimson)
 p1 = objects.GameRectangle(top=100, left=50, 
                            width=10, height=100,
-                           offset=[0, 4], fill=color.white)
+                           dx=0, dy=4, 
+                           fill=color.white)
 p2 = objects.GameRectangle(top=100, left=DISPLAY_WIDTH - 50, 
                            width=10, height=100,
-                           offset=[0, -3], fill=color.white)
+                           dx=0, dy=-3, 
+                           fill=color.white)
 
 def moveobject(obj):
     # check if the object is touching any edge of the window
     if obj.get_bottom() > DISPLAY_HEIGHT or obj.get_top() < 0:
-        obj.flip_vert() # change y direction
+        obj.flip_dy() # change y direction
     if obj.get_right() > DISPLAY_WIDTH or obj.get_left() < 0:
-        obj.flip_horiz() # change x direction
+        obj.flip_dx() # change x direction
     obj.move() # move the square with the given offset
 
 def drawobject(obj):
-    screen.blit(obj.image, obj.rect)
+    screen.blit(obj.surf, obj.rect)
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
         if event.type == pygame.QUIT: 
             running = False # Exiting the main loop
+        else:
+            print('Unhandled event', event)
 
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
@@ -66,7 +71,7 @@ while running: # Main loop
     moveobject(p2)
 
     if sq.colliderect(p1) or sq.colliderect(p2):
-        sq.flip_horiz()
+        sq.flip_dx()
 
 # ----------- Drawing game objects -----------
     drawobject(sq)

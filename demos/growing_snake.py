@@ -9,7 +9,7 @@ import sys
 import math
 import random
 
-# ----------- Game classes -----------
+# -- Game classes ------------------------------------------------------
 sys.path.append('..') # Location of game classes, adjust as necessary
 import pygame_template_colors as color
 import pygame_template_objects as objects
@@ -31,12 +31,13 @@ screen = pygame.display.set_mode((DISPLAY_WIDTH,DISPLAY_HEIGHT))
 pygame.display.set_caption(WINDOW_TITLE)
 
 snake = objects.GameImage(imagefile='snake.png', 
-                          offset=[1, 1], 
-                          width=40, height=40)
-text = objects.GameTextElement(fontfile=None, fontsize=48, 
+                          dx=1, dy=1, 
+                          width=10, height=10)
+text = objects.GameTextElement(fontfile='Some-Time-Later.ttf', 
+                               fontsize=48, 
                                text='The snake is growing!', 
                                top=400, left=400,
-                               offset=[-1, 0],
+                               dx=-1, dy=0,
                                color=color.lightcoral)
 
 running = True # The program will run as long as this variable is true
@@ -45,6 +46,8 @@ while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
         if event.type == pygame.QUIT: 
             running = False # Exiting the main loop
+        else:
+            print('Unhandled event', event)
 
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
@@ -53,8 +56,8 @@ while running: # Main loop
     text.move()  # Moving the text using the given offset pixels
 
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(text.image, text.rect)     # Drawing the text
-    screen.blit(snake.image, snake.rect)   # Drawing the snake
+    screen.blit(text.surf, text.rect)     # Drawing the text
+    screen.blit(snake.surf, snake.rect)   # Drawing the snake
 
     pygame.display.flip()
     clock.tick(FPS)
