@@ -1,6 +1,6 @@
-''' Pygame template demo
+''' Pygame template
 
-A pygame template demo - a moving ball
+A pygame template to get my students quickly up and running.
 
 Copyright (C) 2020 BITJUNGLE Rune Mathisen
 This code is licensed under a GPLv3 license 
@@ -8,18 +8,18 @@ See http://www.gnu.org/licenses/gpl-3.0.html
 '''
 import pygame
 import sys
-#import math
+import math
 #import random 
 
 # -- Game classes ------------------------------------------------------
 import pygame_template_colors as color
 
 # -- Game window properties --------------------------------------------
-DISPLAY_WIDTH = 800   # pixels
-DISPLAY_HEIGHT = 600  # pixels
+DISPLAY_WIDTH = 800           # pixels
+DISPLAY_HEIGHT = 600          # pixels
 WINDOW_TITLE = 'Your Title Here'
-SCREEN_BG_COLOR = color.lawngreen # RGB color code
-FPS = 30 # Frames per second
+SCREEN_BG_COLOR = color.black # From pygame_template_colors.py
+FPS = 30                      # Frames per second
 
 # -- Preparing game window ---------------------------------------------
 # https://www.pygame.org/docs/ref/display.html?highlight=init#pygame.display.init
@@ -34,14 +34,14 @@ pygame.display.set_caption(WINDOW_TITLE)
 running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
-# Making a moving ball 
-radius = 20 # pixels
-ball = pygame.Surface((radius*2, radius*2))
-pygame.draw.circle(ball, color.indianred, (radius, radius), radius)
-x = 200 # ball x coordinate starting position (pixels)
-y = 200 # ball x coordinate starting position (pixels)
-dx = 5  # movement in x direction for each loop
-dy = 3  # movement in y direction for each loop
+# Loading and displaying an image
+# https://www.pygame.org/docs/ref/image.html#pygame.image.load
+image = pygame.image.load('snake.png')
+xstart = 200
+ystart = 100
+n = [i/100 for i in range(-314, 314)] # -pi to pi, used for calculating x and y
+k = 0 # pointer to current n value
+kmax = len(n) - 1
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -53,20 +53,16 @@ while running: # Main loop
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
     # -- Implement game code here --------------------------------------
-    # Check for collision with screen edges
-    if x > (DISPLAY_WIDTH - 2*radius) or x < 0:
-        dx *= -1 # change dx sign
-    if y > (DISPLAY_HEIGHT - 2*radius) or y < 0:
-        dy *= -1 # change dy sign
-
-    # Move the demo ball by dx and dy pixels
-    x += dx
-    y += dy
+    if k > kmax: # end of list
+        k = 0    # reset
+    x = int(xstart + math.sin(n[k])* 100) # calculate new x position
+    y = int(ystart + math.cos(n[k])* 100) # calculate new y position
+    k += 1 # moving the pointer to the next n value
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(ball, (x, y))
+    screen.blit(image, (x, y))
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
