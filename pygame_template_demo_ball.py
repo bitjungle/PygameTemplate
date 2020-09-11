@@ -1,4 +1,6 @@
-''' Pygame demo - image cursor
+''' Pygame template demo
+
+A pygame template demo - a moving ball
 
 Copyright (C) 2020 BITJUNGLE Rune Mathisen
 This code is licensed under a GPLv3 license 
@@ -6,20 +8,13 @@ See http://www.gnu.org/licenses/gpl-3.0.html
 '''
 import pygame
 import sys
-import math
-import random 
-
-# -- Game classes ------------------------------------------------------
-sys.path.append('..') # Location of game classes, adjust as necessary
-import pygame_template_colors as color
-import pygame_template_objects as objects
 
 # -- Game window properties --------------------------------------------
-DISPLAY_WIDTH = 800           # pixels
-DISPLAY_HEIGHT = 600          # pixels
-WINDOW_TITLE = 'Image Cursor'
-SCREEN_BG_COLOR = color.lightskyblue # From pygame_template_colors.py
-FPS = 30                             # Frames per second
+DISPLAY_WIDTH = 800   # pixels
+DISPLAY_HEIGHT = 600  # pixels
+WINDOW_TITLE = 'Your Title Here'
+SCREEN_BG_COLOR = pygame.Color(124,252,0) # RGB color code
+FPS = 30 # Frames per second
 
 # -- Preparing game window ---------------------------------------------
 # https://www.pygame.org/docs/ref/display.html?highlight=init#pygame.display.init
@@ -34,41 +29,40 @@ pygame.display.set_caption(WINDOW_TITLE)
 running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
-sword = objects.GameImage(imagefile='sword.png',
-                      width=25, height=25)
-mymouse = objects.GameMousePointer(obj=sword)
-
-black_holes = []
-
-def make_black_hole(x, y, rad):
-    return objects.GameCircle(radius=rad, width=rad*2, height=rad*2, 
-                              fill=color.black, top=y-rad*2, left=x-rad*2,
-                              border=0)
+# Making a ball for demo purposes
+# Write your own code here
+radius = 20 # pixels
+ball = pygame.Surface((radius*2, radius*2))
+pygame.draw.circle(ball, pygame.Color(205,92,92), (radius, radius), radius)
+x = 200 # ball x coordinate starting position (pixels)
+y = 200 # ball x coordinate starting position (pixels)
+dx = 5  # movement in x direction for each loop
+dy = 3  # movement in y direction for each loop
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
         if event.type == pygame.QUIT: 
             running = False # Exiting the main loop
-        elif event.type == pygame.MOUSEBUTTONUP:
-            pos = pygame.mouse.get_pos() # Get pos when user release button
-            black_holes.append(make_black_hole(pos[0], pos[1], 10))
         else:
             print('Unhandled event', event)
 
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
     # -- Implement game code here --------------------------------------
-    # Your code here
-    #
+    # Check for collision with screen edges
+    if x > (DISPLAY_WIDTH - 2*radius) or x < 0:
+        dx *= -1 # change dx sign
+    if y > (DISPLAY_HEIGHT - 2*radius) or y < 0:
+        dy *= -1 # change dy sign
+
+    # Move the demo ball by dx and dy pixels
+    x += dx
+    y += dy
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    for b in black_holes: # Draw all the black holes we have made so far
-        screen.blit(b.surf, b.rect)
-
-    mymouse.update()
-    screen.blit(mymouse.obj.surf, mymouse.obj.rect)
+    screen.blit(ball, (x, y))
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
