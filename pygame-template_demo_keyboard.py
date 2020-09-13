@@ -75,6 +75,8 @@ while running: # Main loop
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
     pygame.display.flip()
+
+    # Limit the frame rate
     # https://www.pygame.org/docs/ref/time.html#pygame.time.Clock.tick
     clock.tick(FPS)
 

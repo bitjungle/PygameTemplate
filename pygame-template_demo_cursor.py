@@ -1,6 +1,6 @@
-''' Pygame template
+''' Pygame template demo
 
-A pygame template to get my students quickly up and running.
+A pygame template demo - a custom cursor
 
 Copyright (C) 2020 BITJUNGLE Rune Mathisen
 This code is licensed under a GPLv3 license 
@@ -68,6 +68,8 @@ while running: # Main loop
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
     pygame.display.flip()
+
+    # Limit the frame rate
     # https://www.pygame.org/docs/ref/time.html#pygame.time.Clock.tick
     clock.tick(FPS)
 
