@@ -41,6 +41,14 @@ while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
         if event.type == pygame.QUIT: 
             running = False # Exiting the main loop
+        elif event.type == pygame.KEYDOWN:
+            key = pygame.key.get_pressed()
+            print('Key pressed: ', key)
+        elif event.type == pygame.KEYUP:
+            print('Key released')
+        elif event.type == pygame.MOUSEMOTION:
+            mouse = pygame.mouse.get_pos()
+            print('Mouse pos: ', mouse)
         else:
             print('Unhandled event', event)
 

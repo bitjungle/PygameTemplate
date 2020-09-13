@@ -35,7 +35,7 @@ running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
 image = pygame.image.load('sword.png')
-width, height = 25, 25 # pixels
+width, height = 25, 32 # pixels
 cursor = pygame.transform.smoothscale(image, (width, height))
 cursor_rect = cursor.get_rect()
 pygame.mouse.set_visible(False)
@@ -44,6 +44,14 @@ while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
         if event.type == pygame.QUIT: 
             running = False # Exiting the main loop
+        elif event.type == pygame.KEYDOWN:
+            key = pygame.key.get_pressed()
+            print('Key pressed: ', key)
+        elif event.type == pygame.KEYUP:
+            print('Key released')
+        elif event.type == pygame.MOUSEMOTION:
+            mouse = pygame.mouse.get_pos()
+            print('Mouse pos: ', mouse)
         else:
             print('Unhandled event', event)
 
