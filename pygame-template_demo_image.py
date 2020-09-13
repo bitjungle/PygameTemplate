@@ -13,6 +13,7 @@ import math
 
 # -- Game classes ------------------------------------------------------
 import pygame_template_colors as color
+import pygame_template_objects as objects
 
 # -- Game window properties --------------------------------------------
 DISPLAY_WIDTH = 800           # pixels
@@ -36,7 +37,7 @@ running = True # The program will run as long as this variable is true
 # -- Preparing game objects --------------------------------------------
 # Loading and displaying an image
 # https://www.pygame.org/docs/ref/image.html#pygame.image.load
-image = pygame.image.load('snake.png')
+image = objects.GameImage(imagefile='snake.png')
 xstart = 200
 ystart = 100
 n = [i/100 for i in range(-314, 314)] # -pi to pi, used for calculating x and y
@@ -70,7 +71,7 @@ while running: # Main loop
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(image, (x, y))
+    screen.blit(image.surf, (x, y))
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip

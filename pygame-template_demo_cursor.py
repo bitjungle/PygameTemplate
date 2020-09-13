@@ -8,11 +8,12 @@ See http://www.gnu.org/licenses/gpl-3.0.html
 '''
 import pygame
 import sys
-import math
-import random 
+#import math
+#import random 
 
 # -- Game classes ------------------------------------------------------
 import pygame_template_colors as color
+import pygame_template_objects as objects
 
 # -- Game window properties --------------------------------------------
 DISPLAY_WIDTH = 800           # pixels
@@ -34,11 +35,8 @@ pygame.display.set_caption(WINDOW_TITLE)
 running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
-image = pygame.image.load('sword.png')
-width, height = 25, 32 # pixels
-cursor = pygame.transform.smoothscale(image, (width, height))
-cursor_rect = cursor.get_rect()
-pygame.mouse.set_visible(False)
+image = objects.GameImage(imagefile='sword.png', width=25, height=32)
+cursor = objects.GameMousePointer(img=image)
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -58,12 +56,12 @@ while running: # Main loop
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
     # -- Implement game code here --------------------------------------
-    cursor_rect.center = pygame.mouse.get_pos()  # update position
+    cursor.rect.center = pygame.mouse.get_pos()  # update position
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(cursor, cursor_rect)
+    screen.blit(cursor.surf, cursor.rect)
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip

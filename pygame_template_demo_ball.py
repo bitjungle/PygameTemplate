@@ -13,6 +13,7 @@ import sys
 
 # -- Game classes ------------------------------------------------------
 import pygame_template_colors as color
+import pygame_template_objects as objects
 
 # -- Game window properties --------------------------------------------
 DISPLAY_WIDTH = 800   # pixels
@@ -35,13 +36,12 @@ running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
 # Making a moving ball 
-radius = 20 # pixels
-ball = pygame.Surface((radius*2, radius*2))
-pygame.draw.circle(ball, color.indianred, (radius, radius), radius)
+r = 20 # ball radius (pixels)
 x = 200 # ball x coordinate starting position (pixels)
 y = 200 # ball x coordinate starting position (pixels)
-dx = 5  # movement in x direction for each loop
-dy = 3  # movement in y direction for each loop
+dx = 5  # movement in x direction for each loop (pixels)
+dy = 3  # movement in y direction for each loop (pixels)
+ball = objects.GameCircle(radius=r, fill=color.indianred, top=x, left=y)
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -62,9 +62,9 @@ while running: # Main loop
 
     # -- Implement game code here --------------------------------------
     # Check for collision with screen edges
-    if x > (DISPLAY_WIDTH - 2*radius) or x < 0:
+    if x > (DISPLAY_WIDTH - 2*r) or x < 0:
         dx *= -1 # change dx sign
-    if y > (DISPLAY_HEIGHT - 2*radius) or y < 0:
+    if y > (DISPLAY_HEIGHT - 2*r) or y < 0:
         dy *= -1 # change dy sign
 
     # Move the demo ball by dx and dy pixels
@@ -74,7 +74,7 @@ while running: # Main loop
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(ball, (x, y))
+    screen.blit(ball.surf, (x, y))
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip

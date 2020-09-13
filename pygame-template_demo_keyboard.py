@@ -1,6 +1,6 @@
 ''' Pygame template demo
 
-A pygame template to get my students quickly up and running.
+A pygame template demo - responding to keyboard events
 
 Copyright (C) 2020 BITJUNGLE Rune Mathisen
 This code is licensed under a GPLv3 license 
@@ -8,11 +8,12 @@ See http://www.gnu.org/licenses/gpl-3.0.html
 '''
 import pygame
 import sys
-import math
-import random 
+#import math
+#import random 
 
 # -- Game classes ------------------------------------------------------
 import pygame_template_colors as color
+import pygame_template_objects as objects
 
 # -- Game window properties --------------------------------------------
 DISPLAY_WIDTH = 800           # pixels
@@ -36,11 +37,12 @@ running = True # The program will run as long as this variable is true
 # -- Preparing game objects --------------------------------------------
 pad_width = 100 # pixels
 pad_height = 25 # pixels
-pad = pygame.Surface((pad_width, pad_height))
-pad.fill(color.tomato)
-xpos = 100 # pad start position
+xpos = 100      # pad start position
 ypos = DISPLAY_HEIGHT - 2*pad_height
-dx = 0
+pad = objects.GameRectangle(width=pad_width, height=pad_height, 
+                            top=xpos, left=ypos,
+                            fill=color.tomato)
+dx = 0 # how fast is the pad moving? 
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -49,11 +51,11 @@ while running: # Main loop
         elif event.type == pygame.KEYDOWN:
             key = pygame.key.get_pressed()
             if key[pygame.K_LEFT]:
-                dx = -10
+                dx = -10 # move pad 10 pixels to the left
             if key[pygame.K_RIGHT]:
-                dx = 10
+                dx = 10 # move pad 10 pixels to the right
         elif event.type == pygame.KEYUP:
-            dx = 0
+            dx = 0 # stop the pad
         elif event.type == pygame.MOUSEMOTION:
             mouse = pygame.mouse.get_pos()
             print('Mouse pos: ', mouse)
@@ -70,7 +72,7 @@ while running: # Main loop
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(pad, (xpos, ypos))
+    screen.blit(pad.surf, (xpos, ypos))
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip

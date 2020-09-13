@@ -13,6 +13,7 @@ import sys
 
 # -- Game classes ------------------------------------------------------
 import pygame_template_colors as color
+import pygame_template_objects as objects
 
 # -- Game window properties --------------------------------------------
 DISPLAY_WIDTH = 800           # pixels
@@ -35,11 +36,10 @@ running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
 # Writing text to the screen
-fontsize = 48
-font = pygame.font.SysFont('courier', fontsize)
-antialias = False
-xpos = 100
-ypos = 200
+x = 100
+y = 200
+text_element = objects.GameTextElement(fontsize=48, antialias=False, 
+                                       top=y, left=x)
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -59,13 +59,13 @@ while running: # Main loop
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
     # -- Implement game code here --------------------------------------
-    text = 'The FPS is: ' + str(round(clock.get_fps(), 2))
-    textsurface = font.render(text, antialias, color.aliceblue)
+    t = 'The FPS is: ' + str(round(clock.get_fps(), 2))
+    text_element.render(text=t)
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(textsurface, (xpos, ypos))
+    screen.blit(text_element.surf, (x, y))
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
