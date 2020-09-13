@@ -38,7 +38,9 @@ running = True # The program will run as long as this variable is true
 # Writing text to the screen
 x = 100
 y = 200
-text_element = objects.GameTextElement(fontsize=48, antialias=False, 
+text_element = objects.GameTextElement(fontfile='some-time-later.ttf', 
+                                       fontsize=72, 
+                                       antialias=False, 
                                        top=y, left=x)
 
 while running: # Main loop
