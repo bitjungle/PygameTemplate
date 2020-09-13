@@ -37,7 +37,7 @@ running = True # The program will run as long as this variable is true
 # -- Preparing game objects --------------------------------------------
 pad_width = 100 # pixels
 pad_height = 25 # pixels
-xpos = 100      # pad start position
+xpos = DISPLAY_WIDTH // 2 - pad_width // 2 # pad x start position
 ypos = DISPLAY_HEIGHT - 2*pad_height
 pad = objects.GameRectangle(width=pad_width, height=pad_height, 
                             top=xpos, left=ypos,
