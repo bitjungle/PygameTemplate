@@ -35,6 +35,7 @@ pygame.display.set_caption(WINDOW_TITLE)
 running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
+# https://www.pygame.org/docs/ref/music.html
 pygame.mixer.music.load('song.mp3')
 pygame.mixer.music.play()
 playing = True
@@ -54,10 +55,10 @@ while running: # Main loop
             mouse = pygame.mouse.get_pos()
             print('Mouse pos: ', mouse)
         elif event.type == pygame.MOUSEBUTTONUP:
-            if playing:
+            if playing: # pause playback
                 playing = False
                 pygame.mixer.music.pause()
-            else:
+            else: # resume playback
                 playing = True 
                 pygame.mixer.music.unpause()
         else:
