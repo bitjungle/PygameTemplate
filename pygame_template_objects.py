@@ -62,7 +62,8 @@ class GameCircle(pygame.sprite.Sprite):
                            kwargs.get('fill', pygame.Color(128,128,128)), 
                            (r, r), r, 
                            kwargs.get('border', 0))
-        self.rect = self.surf.get_rect()
+        self.rect = self.surf.get_rect(top=kwargs.get('top', 0),
+                                       left=kwargs.get('left', 0))
 
 # ----------------------------------------------------------------------
 class GameImage(pygame.sprite.Sprite):
@@ -167,6 +168,8 @@ class GameTextElement(pygame.sprite.Sprite):
         self.text = kwargs.get('text', '')
         self.antialias = kwargs.get('antialias', True)
         self.render(self.text)
+        self.rect = self.surf.get_rect(top=kwargs.get('top', 0),
+                                       left=kwargs.get('left', 0))
     
     def render(self, text=None):
         '''TODO'''

@@ -64,14 +64,14 @@ while running: # Main loop
     # -- Implement game code here --------------------------------------
     if k > kmax: # end of list
         k = 0    # reset
-    x = int(xstart + math.sin(n[k])* 100) # calculate new x position
-    y = int(ystart + math.cos(n[k])* 100) # calculate new y position
+    image.rect.left = int(xstart + math.sin(n[k])* 100) # calculate new x position
+    image.rect.top = int(ystart + math.cos(n[k])* 100) # calculate new y position
     k += 1 # moving the pointer to the next n value
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(image.surf, (x, y))
+    screen.blit(image.surf, image.rect)
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip

@@ -38,10 +38,10 @@ running = True # The program will run as long as this variable is true
 # Making a moving ball 
 r = 20 # ball radius (pixels)
 x = 200 # ball x coordinate starting position (pixels)
-y = 200 # ball x coordinate starting position (pixels)
+y = 100 # ball x coordinate starting position (pixels)
 dx = 5  # movement in x direction for each loop (pixels)
 dy = 3  # movement in y direction for each loop (pixels)
-ball = objects.GameCircle(radius=r, fill=color.indianred, top=x, left=y)
+ball = objects.GameCircle(radius=r, fill=color.indianred, top=y, left=x)
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -62,19 +62,19 @@ while running: # Main loop
 
     # -- Implement game code here --------------------------------------
     # Check for collision with screen edges
-    if x > (DISPLAY_WIDTH - 2*r) or x < 0:
+    if ball.rect.left > (DISPLAY_WIDTH - 2*r) or ball.rect.left < 0:
         dx *= -1 # change dx sign
-    if y > (DISPLAY_HEIGHT - 2*r) or y < 0:
+    if ball.rect.top > (DISPLAY_HEIGHT - 2*r) or ball.rect.top < 0:
         dy *= -1 # change dy sign
 
     # Move the demo ball by dx and dy pixels
-    x += dx
-    y += dy
+    ball.rect.left += dx
+    ball.rect.top += dy
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(ball.surf, (x, y))
+    screen.blit(ball.surf, ball.rect)
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip

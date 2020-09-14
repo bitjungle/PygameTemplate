@@ -40,7 +40,7 @@ pad_height = 25 # pixels
 xpos = DISPLAY_WIDTH // 2 - pad_width // 2 # pad x start position
 ypos = DISPLAY_HEIGHT - 2*pad_height
 pad = objects.GameRectangle(width=pad_width, height=pad_height, 
-                            top=xpos, left=ypos,
+                            top=ypos, left=xpos,
                             fill=color.tomato)
 dx = 0 # how fast is the pad moving? 
 
@@ -65,14 +65,15 @@ while running: # Main loop
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
     # -- Implement game code here --------------------------------------
-    xpos += dx # Move the pad
-    if xpos == 0 or xpos > DISPLAY_WIDTH - pad_width: # Stop pad at screen edge
+    pad.rect.left += dx # Move the pad
+    if pad.rect.left == 0 or pad.rect.left > DISPLAY_WIDTH - pad_width: 
+        # Stop pad at screen edge
         dx = 0
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(pad.surf, (xpos, ypos))
+    screen.blit(pad.surf, pad.rect)
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
