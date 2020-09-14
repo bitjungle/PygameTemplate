@@ -8,8 +8,8 @@ See http://www.gnu.org/licenses/gpl-3.0.html
 '''
 import pygame
 import sys
-#import math
-#import random 
+#import math   # Un-comment if needed
+#import random # Un-comment if needed
 
 # -- Game classes ------------------------------------------------------
 import pygame_template_colors as color
@@ -55,6 +55,8 @@ while running: # Main loop
         elif event.type == pygame.MOUSEMOTION:
             mouse = pygame.mouse.get_pos()
             print('Mouse pos: ', mouse)
+        elif event.type == pygame.MOUSEBUTTONUP:
+            print('Mouse button released')
         else:
             print('Unhandled event', event)
 
