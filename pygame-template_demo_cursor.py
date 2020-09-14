@@ -63,7 +63,7 @@ while running: # Main loop
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(cursor.surf, cursor.rect)
+    screen.blit(cursor.image, cursor.rect)
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip

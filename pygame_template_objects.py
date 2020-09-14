@@ -20,19 +20,19 @@ class GameRectangle(pygame.sprite.Sprite):
         fill (pygame.Color): Object fill color (optional, default is transparent)
 
     Attributes:
-        surf (Surface): object for representing images
-        rect (Rect): object for storing rectangular coordinates
+        image (Surface): object for representing images
+        rect  (Rect): object for storing rectangular coordinates
     '''
 
     def __init__(self, **kwargs):
         print('GameRectangle(', kwargs, ')')
         super(GameRectangle, self).__init__()
 
-        self.surf = pygame.Surface((kwargs.get('width', 1), 
-                                    kwargs.get('height', 1)))
-        self.surf.fill(kwargs.get('fill', pygame.SRCALPHA))
-        self.rect = self.surf.get_rect(top=kwargs.get('top', 0),
-                                       left=kwargs.get('left', 0))
+        self.image = pygame.Surface((kwargs.get('width', 1), 
+                                     kwargs.get('height', 1)))
+        self.image.fill(kwargs.get('fill', pygame.SRCALPHA))
+        self.rect = self.image.get_rect(top=kwargs.get('top', 0),
+                                        left=kwargs.get('left', 0))
 
 # ----------------------------------------------------------------------
 class GameCircle(pygame.sprite.Sprite):
@@ -48,21 +48,21 @@ class GameCircle(pygame.sprite.Sprite):
         border (int): Border width (optional, default is a filled circle)
 
     Attributes:
-        surf (Surface): object for representing images
-        rect (Rect): object for storing rectangular coordinates
+        image (Surface): object for representing images
+        rect  (Rect): object for storing rectangular coordinates
     '''
 
     def __init__(self, **kwargs):
         print('GameCircle(', kwargs, ')')
         super(GameCircle, self).__init__()
         r = kwargs.get('radius', 1)
-        self.surf = ball = pygame.Surface((r*2, r*2))
-        self.surf.fill(pygame.SRCALPHA)
-        pygame.draw.circle(self.surf, 
+        self.image = pygame.Surface((r*2, r*2))
+        self.image.fill(pygame.SRCALPHA)
+        pygame.draw.circle(self.image, 
                            kwargs.get('fill', pygame.Color(128,128,128)), 
                            (r, r), r, 
                            kwargs.get('border', 0))
-        self.rect = self.surf.get_rect(top=kwargs.get('top', 0),
+        self.rect = self.image.get_rect(top=kwargs.get('top', 0),
                                        left=kwargs.get('left', 0))
 
 # ----------------------------------------------------------------------
@@ -79,28 +79,28 @@ class GameImage(pygame.sprite.Sprite):
         left (int): Left position (optional, default pos is 0)
 
     Attributes:
-        surf (Surface): object for representing images
-        rect (Rect): object for storing rectangular coordinates
+        image (Surface): object for representing images
+        rect  (Rect): object for storing rectangular coordinates
     '''
     
     def __init__(self, **kwargs):
         print('GameImage(', kwargs, ')')
         super(GameImage, self).__init__()
 
-        self.surf = self.image = pygame.image.load(kwargs.get('imagefile', None))
+        self.image = self.image = pygame.image.load(kwargs.get('imagefile', None))
 
         if kwargs.get('width', False) and kwargs.get('height', False):
             self.scale(kwargs.get('width'), kwargs.get('height'))
         else:
-            self.rect = self.surf.get_rect()
+            self.rect = self.image.get_rect()
 
         self.rect.top = kwargs.get('top', 0)   # must set after loading image
         self.rect.left = kwargs.get('left', 0) # must set after loading image
 
     def scale(self, width, height):
         '''Resizes the object Surface to a new resolution, use original image.'''
-        self.surf = pygame.transform.smoothscale(self.image, (width, height))
-        self.rect = self.surf.get_rect()
+        self.image = pygame.transform.smoothscale(self.image, (width, height))
+        self.rect = self.image.get_rect()
 
 # ----------------------------------------------------------------------
 class GameMousePointer(pygame.sprite.Sprite):
@@ -110,8 +110,8 @@ class GameMousePointer(pygame.sprite.Sprite):
         img (GameImage): An image used for the mouse pointer (optional)
 
     Attributes:
-        obj.surf (Surface): object for representing images
-        obj.rect (Rect): object for storing rectangular coordinates
+        image (Surface): object for representing images
+        rect  (Rect): object for storing rectangular coordinates
     '''
     def __init__(self, **kwargs):
         print('GameMousePointer(', kwargs, ')')
@@ -121,11 +121,11 @@ class GameMousePointer(pygame.sprite.Sprite):
 
         if self.obj:
             pygame.mouse.set_visible(False)
-            self.surf = self.obj.surf
+            self.image = self.obj.image
             self.rect = self.obj.rect
         else:
-            self.surf = pygame.Surface((1,1))
-            self.rect = self.surf.get_rect()
+            self.image = pygame.Surface((1,1))
+            self.rect = self.image.get_rect()
             pygame.mouse.set_cursor(*pygame.cursors.broken_x)
  
     def update(self):
@@ -149,8 +149,8 @@ class GameTextElement(pygame.sprite.Sprite):
         fontcolor (pygame.Color): Font color
 
     Attributes:
-        surf (Surface): object for representing images
-        rect (Rect): object for storing rectangular coordinates
+        image (Surface): object for representing images
+        rect  (Rect): object for storing rectangular coordinates
     '''
 
     def __init__(self, **kwargs):
@@ -168,14 +168,14 @@ class GameTextElement(pygame.sprite.Sprite):
         self.text = kwargs.get('text', '')
         self.antialias = kwargs.get('antialias', True)
         self.render(self.text)
-        self.rect = self.surf.get_rect(top=kwargs.get('top', 0),
+        self.rect = self.image.get_rect(top=kwargs.get('top', 0),
                                        left=kwargs.get('left', 0))
     
     def render(self, text=None):
         '''TODO'''
         if text is not None: 
             self.text = text
-        self.surf = self._font.render(self.text, self.antialias, self.color)
+        self.image = self._font.render(self.text, self.antialias, self.color)
 
 if __name__ == "__main__":
     pass
