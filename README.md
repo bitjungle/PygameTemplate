@@ -1,6 +1,12 @@
 # PygameTemplate
 
-## A [pygame template](https://github.com/bitjungle/PygameTemplate/blob/master/pygame-template.py) to get my students quickly up and running. 
+## A [Pygame template](https://github.com/bitjungle/PygameTemplate/blob/master/pygame-template.py) to get my students quickly up and running. 
+
+Install the latest version of Pygame with pip:
+
+    pip install pygame==2.0.0.dev10
+
+Check for the latest release of Pygame 2 [here](https://github.com/pygame/pygame/releases).
 
 All Python source code in this project is copyright (c) 2020 BITJUNGLE Rune Mathisen under a GPLv3 license.
 
