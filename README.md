@@ -6,7 +6,7 @@ Install the latest version of Pygame with pip:
 
     pip install pygame==2.0.0.dev10
 
-Check for the latest release of Pygame 2 [here](https://github.com/pygame/pygame/releases).
+Check for the latest release of Pygame 2 [here](https://github.com/pygame/pygame/releases), and read the documentation [here](https://www.pygame.org/docs/).
 
 All Python source code in this project is copyright (c) 2020 BITJUNGLE Rune Mathisen under a GPLv3 license.
 
