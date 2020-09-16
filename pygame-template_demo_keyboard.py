@@ -66,7 +66,8 @@ while running: # Main loop
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
     # -- Implement game code here --------------------------------------
-    pad.move() # Move the pad
+    pad.update() # Move the pad
+
     if pad.rect.left == 0 or pad.rect.left > DISPLAY_WIDTH - pad_width: 
         # Stop pad at screen edge
         pad.dx = 0

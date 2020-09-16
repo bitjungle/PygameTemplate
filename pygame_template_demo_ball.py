@@ -70,7 +70,7 @@ while running: # Main loop
         ball.dy *= -1 # change dy sign
 
     # Move the demo ball by dx and dy pixels
-    ball.move()
+    ball.update()
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here

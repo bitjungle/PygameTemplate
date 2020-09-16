@@ -35,10 +35,8 @@ class GameObject(pygame.sprite.Sprite):
         self.dx = kwargs.get('dx', 0)
         self.dy = kwargs.get('dy', 0)
 
-    def move(self, **kwargs):
+    def update(self):
         '''Move the object by dx and dy'''
-        if kwargs.get('dx', None): self.dx = kwargs.get('dx')
-        if kwargs.get('dy', None): self.dy = kwargs.get('dy')
         self.rect = self.rect.move((self.dx, self.dy))
 
     def move_to(self, **kwargs):
@@ -117,6 +115,7 @@ class GameImage(GameObject):
         height (int): Image height (optional, will scale the image)
         top (int): Top position (optional, default pos is 0)
         left (int): Left position (optional, default pos is 0)
+        scale (float): scale image by factor
 
     Attributes:
         image (Surface): object for representing images
@@ -133,6 +132,10 @@ class GameImage(GameObject):
             self.scale(kwargs.get('width'), kwargs.get('height'))
         else:
             self.rect = self.image.get_rect()
+
+        if kwargs.get('scale', False):
+            self.scale(int(self.rect.width * kwargs.get('scale')), 
+                       int(self.rect.height * kwargs.get('scale')))
 
         self.rect.top = kwargs.get('top', 0)   # must set after loading image
         self.rect.left = kwargs.get('left', 0) # must set after loading image
