@@ -63,14 +63,10 @@ while running: # Main loop
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
     # -- Implement game code here --------------------------------------
-    # Check for collision with screen edges
-    if ball.rect.left > (DISPLAY_WIDTH - 2*r) or ball.rect.left < 0:
-        ball.dx *= -1 # change dx sign
-    if ball.rect.top > (DISPLAY_HEIGHT - 2*r) or ball.rect.top < 0:
-        ball.dy *= -1 # change dy sign
-
     # Move the demo ball by dx and dy pixels
     ball.update()
+    # Check for collision with screen edges
+    ball.collide_window_edge(DISPLAY_WIDTH, DISPLAY_HEIGHT)
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here

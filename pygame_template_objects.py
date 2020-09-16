@@ -39,6 +39,20 @@ class GameObject(pygame.sprite.Sprite):
         '''Move the object by dx and dy'''
         self.rect = self.rect.move((self.dx, self.dy))
 
+    def collide(self, group, flip_x = True, flip_y = True):
+        '''Checks if object collide with object in another sprite group'''
+        if pygame.sprite.spritecollide(self, group, False):
+            if flip_x: self.dx *= -1
+            if flip_y: self.dy *= -1
+            self.update()
+
+    def collide_window_edge(self, width, height):
+        if self.rect.left < 0 or self.rect.right > width:
+            self.dx *= -1
+        if self.rect.top < 0 or self.rect.bottom > height:
+            self.dy *= -1
+        self.update()
+
     def move_to(self, **kwargs):
         '''Move the object to x and y'''
         if kwargs.get('x', None): self.rect.centerx = kwargs.get('x')

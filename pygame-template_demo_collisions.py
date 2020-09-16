@@ -1,6 +1,6 @@
-''' Pygame template demo
+''' Pygame template
 
-A pygame template demo - responding to keyboard events
+A pygame template to get my students quickly up and running.
 
 Copyright (C) 2020 BITJUNGLE Rune Mathisen
 This code is licensed under a GPLv3 license 
@@ -9,7 +9,7 @@ See http://www.gnu.org/licenses/gpl-3.0.html
 import pygame
 import sys
 #import math   # Un-comment if needed
-#import random # Un-comment if needed
+import random
 
 # -- Game classes ------------------------------------------------------
 import pygame_template_colors as color
@@ -35,13 +35,15 @@ pygame.display.set_caption(WINDOW_TITLE)
 running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
-pad_width = 100 # pixels
-pad_height = 25 # pixels
-xpos = DISPLAY_WIDTH // 2 - pad_width // 2 # pad x start position
-ypos = DISPLAY_HEIGHT - 2*pad_height
-pad = objects.GameRectangle(width=pad_width, height=pad_height, 
-                            top=ypos, left=xpos, dx = 0, dy = 0,
-                            fill=color.tomato)
+NUM_SPIDERS = 25
+spiders = pygame.sprite.Group()
+for _ in range(NUM_SPIDERS):
+    x = random.randint(0, 700)
+    y = random.randint(0, 500)
+    dx = random.randint(-5, 5)
+    dy = random.randint(-5, 5)
+    spiders.add(objects.GameImage(imagefile='spider.png', scale=0.1, 
+                                  top=y, left=x, dx=dx, dy=dy))
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -49,12 +51,9 @@ while running: # Main loop
             running = False # Exiting the main loop
         elif event.type == pygame.KEYDOWN:
             key = pygame.key.get_pressed()
-            if key[pygame.K_LEFT]:
-                pad.dx = -10 # move pad 10 pixels to the left
-            if key[pygame.K_RIGHT]:
-                pad.dx = 10 # move pad 10 pixels to the right
+            print('Key pressed: ', key)
         elif event.type == pygame.KEYUP:
-            pad.dx = 0 # stop the pad
+            print('Key released')
         elif event.type == pygame.MOUSEMOTION:
             mouse = pygame.mouse.get_pos()
             print('Mouse pos: ', mouse)
@@ -66,16 +65,18 @@ while running: # Main loop
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
     # -- Implement game code here --------------------------------------
-    pad.update() # Move the pad
-
-    if pad.rect.left == 0 or pad.rect.right > DISPLAY_WIDTH: 
-        # Stop pad at screen edge
-        pad.dx = 0
+    for s in spiders:
+        s.collide_window_edge(DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        spiders.remove(s)  # remove from group
+        s.collide(spiders) # check for collision with objects in group
+        spiders.add(s)     # add back into group
+        
+    spiders.update()
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
-    screen.blit(pad.image, pad.rect)
+    spiders.draw(screen)
 
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
