@@ -39,9 +39,9 @@ running = True # The program will run as long as this variable is true
 r = 20 # ball radius (pixels)
 x = 200 # ball x coordinate starting position (pixels)
 y = 100 # ball x coordinate starting position (pixels)
-dx = 5  # movement in x direction for each loop (pixels)
-dy = 3  # movement in y direction for each loop (pixels)
-ball = objects.GameCircle(radius=r, fill=color.indianred, top=y, left=x)
+ball = objects.GameCircle(radius=r, fill=color.indianred, 
+                          top=y, left=x,
+                          dx=5, dy=3)
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -65,13 +65,12 @@ while running: # Main loop
     # -- Implement game code here --------------------------------------
     # Check for collision with screen edges
     if ball.rect.left > (DISPLAY_WIDTH - 2*r) or ball.rect.left < 0:
-        dx *= -1 # change dx sign
+        ball.dx *= -1 # change dx sign
     if ball.rect.top > (DISPLAY_HEIGHT - 2*r) or ball.rect.top < 0:
-        dy *= -1 # change dy sign
+        ball.dy *= -1 # change dy sign
 
     # Move the demo ball by dx and dy pixels
-    ball.rect.left += dx
-    ball.rect.top += dy
+    ball.move()
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here

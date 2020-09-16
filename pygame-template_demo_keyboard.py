@@ -40,9 +40,8 @@ pad_height = 25 # pixels
 xpos = DISPLAY_WIDTH // 2 - pad_width // 2 # pad x start position
 ypos = DISPLAY_HEIGHT - 2*pad_height
 pad = objects.GameRectangle(width=pad_width, height=pad_height, 
-                            top=ypos, left=xpos,
+                            top=ypos, left=xpos, dx = 0, dy = 0,
                             fill=color.tomato)
-dx = 0 # how fast is the pad moving? 
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -51,11 +50,11 @@ while running: # Main loop
         elif event.type == pygame.KEYDOWN:
             key = pygame.key.get_pressed()
             if key[pygame.K_LEFT]:
-                dx = -10 # move pad 10 pixels to the left
+                pad.dx = -10 # move pad 10 pixels to the left
             if key[pygame.K_RIGHT]:
-                dx = 10 # move pad 10 pixels to the right
+                pad.dx = 10 # move pad 10 pixels to the right
         elif event.type == pygame.KEYUP:
-            dx = 0 # stop the pad
+            pad.dx = 0 # stop the pad
         elif event.type == pygame.MOUSEMOTION:
             mouse = pygame.mouse.get_pos()
             print('Mouse pos: ', mouse)
@@ -67,10 +66,10 @@ while running: # Main loop
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
     # -- Implement game code here --------------------------------------
-    pad.rect.left += dx # Move the pad
+    pad.move() # Move the pad
     if pad.rect.left == 0 or pad.rect.left > DISPLAY_WIDTH - pad_width: 
         # Stop pad at screen edge
-        dx = 0
+        pad.dx = 0
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here

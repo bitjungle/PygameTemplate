@@ -7,7 +7,47 @@ See http://www.gnu.org/licenses/gpl-3.0.html
 import pygame
 
 # ----------------------------------------------------------------------
-class GameRectangle(pygame.sprite.Sprite):
+class GameObject(pygame.sprite.Sprite):
+    '''Base class for all game objects
+
+    Extends the pygame.sprite.Sprite class. 
+    Base class for all game objects.
+
+    Args:
+        dx (int): Number of pixels to move object in x direction
+        dy (int): Number of pixels to move object in y direction
+
+    Attributes:
+        image (Surface): object for representing images
+        rect  (Rect): object for storing rectangular coordinates
+        dx (int): Speed in x direction (pixels)
+        dy (int): Speed in y direction (pixels)
+    '''
+    def __init__(self, **kwargs):
+        print('GameObject(', kwargs, ')')
+        super(GameObject, self).__init__()
+
+        self.image = pygame.Surface((kwargs.get('width', 1), 
+                                     kwargs.get('height', 1)))
+        self.image.fill(pygame.SRCALPHA)
+        self.rect = self.image.get_rect()
+
+        self.dx = kwargs.get('dx', 0)
+        self.dy = kwargs.get('dy', 0)
+
+    def move(self, **kwargs):
+        '''Move the object by dx and dy'''
+        if kwargs.get('dx', None): self.dx = kwargs.get('dx')
+        if kwargs.get('dy', None): self.dy = kwargs.get('dy')
+        self.rect = self.rect.move((self.dx, self.dy))
+
+    def move_to(self, **kwargs):
+        '''Move the object to x and y'''
+        if kwargs.get('x', None): self.rect.centerx = kwargs.get('x')
+        if kwargs.get('y', None): self.rect.centery = kwargs.get('y')
+
+# ----------------------------------------------------------------------
+class GameRectangle(GameObject):
     '''Rectangular object
     
     Class for creating rectangular objects.
@@ -26,16 +66,17 @@ class GameRectangle(pygame.sprite.Sprite):
 
     def __init__(self, **kwargs):
         print('GameRectangle(', kwargs, ')')
-        super(GameRectangle, self).__init__()
+        super(GameRectangle, self).__init__(**kwargs)
 
-        self.image = pygame.Surface((kwargs.get('width', 1), 
-                                     kwargs.get('height', 1)))
-        self.image.fill(kwargs.get('fill', pygame.SRCALPHA))
+        pygame.draw.rect(self.image, kwargs.get('fill', pygame.SRCALPHA), 
+                         (0, 0, kwargs.get('width', 1), kwargs.get('height', 1)),
+                          width=0)
+        
         self.rect = self.image.get_rect(top=kwargs.get('top', 0),
                                         left=kwargs.get('left', 0))
 
 # ----------------------------------------------------------------------
-class GameCircle(pygame.sprite.Sprite):
+class GameCircle(GameObject):
     '''Circle object
     
     Class for creating circular objects.
@@ -54,19 +95,18 @@ class GameCircle(pygame.sprite.Sprite):
 
     def __init__(self, **kwargs):
         print('GameCircle(', kwargs, ')')
-        super(GameCircle, self).__init__()
         r = kwargs.get('radius', 1)
-        self.image = pygame.Surface((r*2, r*2))
-        self.image.fill(pygame.SRCALPHA)
+        kwargs['width'] = kwargs['height'] = r*2
+        super(GameCircle, self).__init__(**kwargs)
+
         pygame.draw.circle(self.image, 
                            kwargs.get('fill', pygame.Color(128,128,128)), 
-                           (r, r), r, 
-                           kwargs.get('border', 0))
+                           (r, r), r, kwargs.get('border', 0))
         self.rect = self.image.get_rect(top=kwargs.get('top', 0),
-                                       left=kwargs.get('left', 0))
+                                        left=kwargs.get('left', 0))
 
 # ----------------------------------------------------------------------
-class GameImage(pygame.sprite.Sprite):
+class GameImage(GameObject):
     '''Image object
     
     Create an image object
@@ -85,9 +125,9 @@ class GameImage(pygame.sprite.Sprite):
     
     def __init__(self, **kwargs):
         print('GameImage(', kwargs, ')')
-        super(GameImage, self).__init__()
+        super(GameImage, self).__init__(**kwargs)
 
-        self.image = self.image = pygame.image.load(kwargs.get('imagefile', None))
+        self.image = pygame.image.load(kwargs.get('imagefile', None))
 
         if kwargs.get('width', False) and kwargs.get('height', False):
             self.scale(kwargs.get('width'), kwargs.get('height'))
@@ -103,7 +143,7 @@ class GameImage(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
 # ----------------------------------------------------------------------
-class GameMousePointer(pygame.sprite.Sprite):
+class GameMousePointer(GameObject):
     ''' A custom mouse pointer 
 
     Args:
@@ -115,7 +155,7 @@ class GameMousePointer(pygame.sprite.Sprite):
     '''
     def __init__(self, **kwargs):
         print('GameMousePointer(', kwargs, ')')
-        super().__init__()
+        super(GameMousePointer, self).__init__(**kwargs)
 
         self.obj = kwargs.get('img', None)
 
@@ -124,9 +164,8 @@ class GameMousePointer(pygame.sprite.Sprite):
             self.image = self.obj.image
             self.rect = self.obj.rect
         else:
-            self.image = pygame.Surface((1,1))
-            self.rect = self.image.get_rect()
             pygame.mouse.set_cursor(*pygame.cursors.broken_x)
+            self.rect = self.image.get_rect()
  
     def update(self):
         """Set the object to be where the mouse is. """
@@ -134,7 +173,7 @@ class GameMousePointer(pygame.sprite.Sprite):
         self.obj.move_to(x=pos[0], y=pos[1])
 
 # ----------------------------------------------------------------------
-class GameTextElement(pygame.sprite.Sprite):
+class GameTextElement(GameObject):
     '''Text element
     
     Text element
@@ -155,7 +194,7 @@ class GameTextElement(pygame.sprite.Sprite):
 
     def __init__(self, **kwargs):
         print('GameTextElement(', kwargs, ')')
-        super(GameTextElement, self).__init__()
+        super(GameTextElement, self).__init__(**kwargs)
 
         self.fontfile = kwargs.get('fontfile', None)
         self.fontsize = kwargs.get('fontsize', 24)

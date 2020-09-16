@@ -14,4 +14,6 @@ The [some time later](https://github.com/ctrlcctrlv/some-time-later) font is cop
 
 The [sword image](https://www.cursor.cc/?action=icon&file_id=20160) has a CC0 license.
 
+The clipart in *spider.png* is in the Public Domain.
+
 The song in *song.mp3* is in the Public Domain.
