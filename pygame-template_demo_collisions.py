@@ -38,10 +38,11 @@ running = True # The program will run as long as this variable is true
 NUM_SPIDERS = 25
 spiders = pygame.sprite.Group()
 for _ in range(NUM_SPIDERS):
+    # Creating spiders with random start position and random speed/direction
     x = random.randint(0, 700)
     y = random.randint(0, 500)
-    dx = random.randint(-5, 5)
-    dy = random.randint(-5, 5)
+    dx = random.randint(-4, 4)
+    dy = random.randint(-4, 4)
     spiders.add(objects.GameImage(imagefile='spider.png', scale=0.1, 
                                   top=y, left=x, dx=dx, dy=dy))
 
@@ -68,7 +69,7 @@ while running: # Main loop
     for s in spiders:
         s.collide_window_edge(DISPLAY_WIDTH, DISPLAY_HEIGHT)
         spiders.remove(s)  # remove from group
-        s.collide(spiders) # check for collision with objects in group
+        s.collide(spiders, ratio=0.5) # check for collision with objects in group
         spiders.add(s)     # add back into group
         
     spiders.update()

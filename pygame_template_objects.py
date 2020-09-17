@@ -39,9 +39,23 @@ class GameObject(pygame.sprite.Sprite):
         '''Move the object by dx and dy'''
         self.rect = self.rect.move((self.dx, self.dy))
 
-    def collide(self, group, flip_x = True, flip_y = True):
-        '''Checks if object collide with object in another sprite group'''
-        if pygame.sprite.spritecollide(self, group, False):
+    def collide(self, group, **kwargs):
+        '''Checks if object collide with object in another sprite group
+
+        Args:
+            group  (sprite.Group):
+            flip_x (int):
+            flip_y (int):
+            dokill (bool):
+            ratio  (float):
+        '''
+        flip_x = kwargs.get('flip_x', True)
+        flip_y = kwargs.get('flip_y', True)
+        dokill = kwargs.get('dokill', False)
+        ratio = kwargs.get('ratio', 1.0)
+        if pygame.sprite.spritecollide(self, group, dokill, 
+                                       pygame.sprite.collide_rect_ratio(ratio)):
+            # TODO: calculate correct angle
             if flip_x: self.dx *= -1
             if flip_y: self.dy *= -1
             self.update()
