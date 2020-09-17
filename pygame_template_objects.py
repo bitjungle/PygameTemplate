@@ -11,7 +11,6 @@ class GameObject(pygame.sprite.Sprite):
     '''Base class for all game objects
 
     Extends the pygame.sprite.Sprite class. 
-    Base class for all game objects.
 
     Args:
         dx (int): Number of pixels to move object in x direction
@@ -84,6 +83,9 @@ class GameRectangle(GameObject):
         top (int): Top position (optional, default pos is 0)
         left (int): Left position (optional, default pos is 0)
         fill (pygame.Color): Object fill color (optional, default is transparent)
+        dx (int): Speed in x direction (pixels)
+        dy (int): Speed in y direction (pixels)
+        border (int): Border thickness, default is a filled rectangle
 
     Attributes:
         image (Surface): object for representing images
@@ -94,9 +96,45 @@ class GameRectangle(GameObject):
         print('GameRectangle(', kwargs, ')')
         super(GameRectangle, self).__init__(**kwargs)
 
-        pygame.draw.rect(self.image, kwargs.get('fill', pygame.SRCALPHA), 
-                         (0, 0, kwargs.get('width', 1), kwargs.get('height', 1)),
-                          width=0)
+        pygame.draw.rect(self.image, 
+                         kwargs.get('fill', pygame.SRCALPHA), 
+                         (0, 0, kwargs.get('width', 1), 
+                         kwargs.get('height', 1)),
+                         kwargs.get('border', 0))
+        
+        self.rect = self.image.get_rect(top=kwargs.get('top', 0),
+                                        left=kwargs.get('left', 0))
+
+# ----------------------------------------------------------------------
+class GameEllipse(GameObject):
+    '''Ellipse object
+    
+    Class for creating elliptical objects.
+
+    Args:
+        width (int): Rect width in pixels
+        height (int): Rect height in pixels
+        top (int): Top position (optional, default pos is 0)
+        left (int): Left position (optional, default pos is 0)
+        fill (pygame.Color): Object fill color (optional, default is transparent)
+        dx (int): Speed in x direction (pixels)
+        dy (int): Speed in y direction (pixels)
+        border (int): Border thickness, default is a filled ellipse
+
+    Attributes:
+        image (Surface): object for representing images
+        rect  (Rect): object for storing rectangular coordinates
+    '''
+
+    def __init__(self, **kwargs):
+        print('GameEllipse(', kwargs, ')')
+        super(GameEllipse, self).__init__(**kwargs)
+
+        pygame.draw.ellipse(self.image, 
+                            kwargs.get('fill', pygame.SRCALPHA), 
+                            (0, 0, kwargs.get('width', 1), 
+                            kwargs.get('height', 1)),
+                            kwargs.get('border', 0))
         
         self.rect = self.image.get_rect(top=kwargs.get('top', 0),
                                         left=kwargs.get('left', 0))
@@ -113,6 +151,8 @@ class GameCircle(GameObject):
         left (int): Left position (optional, default pos is 0)
         fill (pygame.Color): Circle/border fill color (optional, default is gray)
         border (int): Border width (optional, default is a filled circle)
+        dx (int): Speed in x direction (pixels)
+        dy (int): Speed in y direction (pixels)
 
     Attributes:
         image (Surface): object for representing images
@@ -127,9 +167,43 @@ class GameCircle(GameObject):
 
         pygame.draw.circle(self.image, 
                            kwargs.get('fill', pygame.Color(128,128,128)), 
-                           (r, r), r, kwargs.get('border', 0))
+                           (r, r), r, 
+                           kwargs.get('border', 0))
         self.rect = self.image.get_rect(top=kwargs.get('top', 0),
                                         left=kwargs.get('left', 0))
+
+# ----------------------------------------------------------------------
+class GameLine(GameObject):
+    '''Line object
+    
+    Class for creating line objects.
+
+    Args:
+        start_pos (list(int)): 
+        end_pos (list(int)):
+        line_width (int):
+        fill (pygame.Color): Object fill color (optional, default is transparent)
+        dx (int): Speed in x direction (pixels)
+        dy (int): Speed in y direction (pixels)
+
+    Attributes:
+        image (Surface): object for representing images
+        rect  (Rect): object for storing rectangular coordinates
+    '''
+
+    def __init__(self, **kwargs):
+        print('GameLine(', kwargs, ')')
+        kwargs['width'] = kwargs['height'] = max(max(kwargs.get('start_pos', (1, 1))), 
+                                                 max(kwargs.get('end_pos', (1, 1))))
+        super(GameLine, self).__init__(**kwargs)
+
+        pygame.draw.line(self.image,
+                         kwargs.get('fill', pygame.SRCALPHA),
+                         kwargs.get('start_pos', (0, 0)),
+                         kwargs.get('end_pos', (1, 1)),
+                         kwargs.get('line_width', 1))
+        
+        self.rect = self.image.get_rect()
 
 # ----------------------------------------------------------------------
 class GameImage(GameObject):
@@ -144,6 +218,8 @@ class GameImage(GameObject):
         top (int): Top position (optional, default pos is 0)
         left (int): Left position (optional, default pos is 0)
         scale (float): scale image by factor
+        dx (int): Speed in x direction (pixels)
+        dy (int): Speed in y direction (pixels)
 
     Attributes:
         image (Surface): object for representing images
@@ -199,7 +275,7 @@ class GameMousePointer(GameObject):
             self.rect = self.image.get_rect()
  
     def update(self):
-        """Set the object to be where the mouse is. """
+        '''Set the object to be where the mouse is.'''
         pos = pygame.mouse.get_pos()
         self.obj.move_to(x=pos[0], y=pos[1])
 
@@ -217,6 +293,8 @@ class GameTextElement(GameObject):
         fontsize (int): Font size (optional, default is 24)
         antialias (bool): Turn antialias on/off
         fontcolor (pygame.Color): Font color
+        dx (int): Speed in x direction (pixels)
+        dy (int): Speed in y direction (pixels)
 
     Attributes:
         image (Surface): object for representing images

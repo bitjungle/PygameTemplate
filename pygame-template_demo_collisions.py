@@ -1,6 +1,6 @@
-''' Pygame template
+''' Pygame template demo
 
-A pygame template to get my students quickly up and running.
+A pygame template demo - detecting and handling collisions
 
 Copyright (C) 2020 BITJUNGLE Rune Mathisen
 This code is licensed under a GPLv3 license 

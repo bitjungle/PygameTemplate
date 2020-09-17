@@ -42,6 +42,12 @@ ypos = DISPLAY_HEIGHT - 2*pad_height
 pad = objects.GameRectangle(width=pad_width, height=pad_height, 
                             top=ypos, left=xpos, dx = 0, dy = 0,
                             fill=color.tomato)
+ellipse = objects.GameEllipse(width=DISPLAY_WIDTH, height=DISPLAY_HEIGHT, 
+                              top=0, left=0, fill=color.darkslategray,
+                              border=100)
+line = objects.GameLine(start_pos=(0, DISPLAY_HEIGHT // 2), 
+                        end_pos=(DISPLAY_WIDTH, DISPLAY_HEIGHT // 2), 
+                        line_width=10, fill=color.slategray)
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -75,8 +81,10 @@ while running: # Main loop
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
+    screen.blit(ellipse.image, ellipse.rect)
+    screen.blit(line.image, line.rect)
     screen.blit(pad.image, pad.rect)
-
+    
     # Update the full display Surface to the screen
     # https://www.pygame.org/docs/ref/display.html#pygame.display.flip
     pygame.display.flip()
