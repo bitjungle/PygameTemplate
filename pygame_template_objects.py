@@ -5,6 +5,7 @@ This code is licensed under a GPLv3 license
 See http://www.gnu.org/licenses/gpl-3.0.html 
 '''
 import pygame
+#import math
 
 # ----------------------------------------------------------------------
 class GameObject(pygame.sprite.Sprite):
@@ -34,6 +35,16 @@ class GameObject(pygame.sprite.Sprite):
         self.dx = kwargs.get('dx', 0)
         self.dy = kwargs.get('dy', 0)
 
+    def __repr__(self):
+        '''Returns object representation'''
+        return '<{:s} at {:s} x:{:n} y:{:n} dx:{:n} dy:{:n}'.format(
+                self.__class__.__name__,
+                hex(id(self)),
+                self.rect.top,
+                self.rect.left,
+                self.dx,
+                self.dy)
+
     def update(self):
         '''Move the object by dx and dy'''
         self.rect = self.rect.move((self.dx, self.dy))
@@ -43,33 +54,40 @@ class GameObject(pygame.sprite.Sprite):
 
         Args:
             group  (sprite.Group):
-            flip_x (int):
-            flip_y (int):
             dokill (bool):
             ratio  (float):
         '''
-        flip_x = kwargs.get('flip_x', True)
-        flip_y = kwargs.get('flip_y', True)
         dokill = kwargs.get('dokill', False)
         ratio = kwargs.get('ratio', 1.0)
-        if pygame.sprite.spritecollide(self, group, dokill, 
-                                       pygame.sprite.collide_rect_ratio(ratio)):
-            # TODO: calculate correct angle
-            if flip_x: self.dx *= -1
-            if flip_y: self.dy *= -1
-            self.update()
+        circle = kwargs.get('circle', False)
+
+        if circle:
+            col = pygame.sprite.spritecollide(self, group, dokill, 
+                                              pygame.sprite.collide_circle_ratio(ratio))
+        else:
+            col = pygame.sprite.spritecollide(self, group, dokill, 
+                                              pygame.sprite.collide_rect_ratio(ratio))
+
+        if col:
+            print(self, ' collision with ', col[0])
+            # TODO: Move back to avoid sticky objects
+            # TODO: calculate correct angle?
+            self.dx, self.dy, col[0].dx, col[0].dy = col[0].dy, col[0].dx, self.dy, self.dx
 
     def collide_window_edge(self, width, height):
         if self.rect.left < 0 or self.rect.right > width:
             self.dx *= -1
         if self.rect.top < 0 or self.rect.bottom > height:
             self.dy *= -1
-        self.update()
+        # Move back to avoid sticky objects
+        self.rect = self.rect.move((2*self.dx, 2*self.dy))
 
     def move_to(self, **kwargs):
         '''Move the object to x and y'''
-        if kwargs.get('x', None): self.rect.centerx = kwargs.get('x')
-        if kwargs.get('y', None): self.rect.centery = kwargs.get('y')
+        if kwargs.get('x', None): 
+            self.rect.centerx = kwargs.get('x')
+        if kwargs.get('y', None): 
+            self.rect.centery = kwargs.get('y')
 
 # ----------------------------------------------------------------------
 class GameRectangle(GameObject):
@@ -146,7 +164,7 @@ class GameCircle(GameObject):
     Class for creating circular objects.
 
     Args:
-        radius (int): Circle radius (optional)
+        radius (int): Circle radius
         top (int): Top position (optional, default pos is 0)
         left (int): Left position (optional, default pos is 0)
         fill (pygame.Color): Circle/border fill color (optional, default is gray)
@@ -161,13 +179,13 @@ class GameCircle(GameObject):
 
     def __init__(self, **kwargs):
         print('GameCircle(', kwargs, ')')
-        r = kwargs.get('radius', 1)
-        kwargs['width'] = kwargs['height'] = r*2
+        self.radius = kwargs.get('radius', 1)
+        kwargs['width'] = kwargs['height'] = self.radius*2
         super(GameCircle, self).__init__(**kwargs)
 
         pygame.draw.circle(self.image, 
                            kwargs.get('fill', pygame.Color(128,128,128)), 
-                           (r, r), r, 
+                           (self.radius, self.radius), self.radius, 
                            kwargs.get('border', 0))
         self.rect = self.image.get_rect(top=kwargs.get('top', 0),
                                         left=kwargs.get('left', 0))

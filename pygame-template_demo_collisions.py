@@ -35,16 +35,38 @@ pygame.display.set_caption(WINDOW_TITLE)
 running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
+NUM_DISCS = 5
+discs = pygame.sprite.Group()
+c = 0
+while c < NUM_DISCS:
+    x = random.randint(0, 700)
+    y = random.randint(0, 500)
+    dx = random.randint(-2, 2)
+    dy = random.randint(-2, 2)
+    d = objects.GameCircle(radius=25, 
+                           fill=(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 
+                           top=y, left=x,
+                           dx=dx, dy=dy)
+    if not pygame.sprite.spritecollide(d, discs, False):
+        # Making sure that we don't create overlapping discs
+        discs.add(d)
+        c += 1
+
 NUM_SPIDERS = 25
 spiders = pygame.sprite.Group()
-for _ in range(NUM_SPIDERS):
+c = 0
+while c < NUM_SPIDERS:
     # Creating spiders with random start position and random speed/direction
     x = random.randint(0, 700)
     y = random.randint(0, 500)
     dx = random.randint(-4, 4)
     dy = random.randint(-4, 4)
-    spiders.add(objects.GameImage(imagefile='spider.png', scale=0.1, 
-                                  top=y, left=x, dx=dx, dy=dy))
+    s = objects.GameImage(imagefile='spider.png', scale=0.1, 
+                          top=y, left=x, dx=dx, dy=dy)
+    if not pygame.sprite.spritecollide(s, spiders, False):
+        # Making sure that we don't create overlapping spiders
+        spiders.add(s)
+        c += 1
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -66,17 +88,21 @@ while running: # Main loop
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
     # -- Implement game code here --------------------------------------
-    for s in spiders:
+    for d in discs: # Loop through all disks to find collisions
+        d.collide_window_edge(DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        discs.remove(d)  # remove disc from group
+        d.collide(discs, circle=True) # check for collision with objects in group
+        discs.add(d)     # add disc back into group
+    for s in spiders: # Loop through all spiders to find collisions
         s.collide_window_edge(DISPLAY_WIDTH, DISPLAY_HEIGHT)
-        spiders.remove(s)  # remove from group
-        s.collide(spiders, ratio=0.5) # check for collision with objects in group
-        spiders.add(s)     # add back into group
+        spiders.remove(s)  # remove spider from group
+        s.collide(spiders, ratio=0.6) # check for collision with objects in group
+        spiders.add(s)     # add spider back into group
         
-    spiders.update()
-
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
+    discs.draw(screen)
     spiders.draw(screen)
 
     # Update the full display Surface to the screen
