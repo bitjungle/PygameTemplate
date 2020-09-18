@@ -20,7 +20,7 @@ DISPLAY_WIDTH = 800           # pixels
 DISPLAY_HEIGHT = 600          # pixels
 WINDOW_TITLE = 'Your Title Here'
 SCREEN_BG_COLOR = color.darkolivegreen # From pygame_template_colors.py
-FPS = 30                      # Frames per second
+FPS = 60                      # Frames per second
 
 # -- Preparing game window ---------------------------------------------
 # https://www.pygame.org/docs/ref/display.html?highlight=init#pygame.display.init

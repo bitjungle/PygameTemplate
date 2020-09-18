@@ -20,7 +20,7 @@ DISPLAY_WIDTH = 800   # pixels
 DISPLAY_HEIGHT = 600  # pixels
 WINDOW_TITLE = 'Your Title Here'
 SCREEN_BG_COLOR = color.lawngreen # RGB color code
-FPS = 30 # Frames per second
+FPS = 60 # Frames per second
 
 # -- Preparing game window ---------------------------------------------
 # https://www.pygame.org/docs/ref/display.html?highlight=init#pygame.display.init
@@ -41,7 +41,7 @@ x = 200 # ball x coordinate starting position (pixels)
 y = 100 # ball x coordinate starting position (pixels)
 ball = objects.GameCircle(radius=r, fill=color.indianred, 
                           top=y, left=x,
-                          dx=5, dy=3)
+                          dx=3, dy=1)
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html

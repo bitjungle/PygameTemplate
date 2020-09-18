@@ -20,7 +20,7 @@ DISPLAY_WIDTH = 800           # pixels
 DISPLAY_HEIGHT = 600          # pixels
 WINDOW_TITLE = 'Your Title Here'
 SCREEN_BG_COLOR = color.black # From pygame_template_colors.py
-FPS = 30                      # Frames per second
+FPS = 60                      # Frames per second
 
 # -- Preparing game window ---------------------------------------------
 # https://www.pygame.org/docs/ref/display.html?highlight=init#pygame.display.init
@@ -35,11 +35,12 @@ pygame.display.set_caption(WINDOW_TITLE)
 running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
-pad_width = 100 # pixels
-pad_height = 25 # pixels
-xpos = DISPLAY_WIDTH // 2 - pad_width // 2 # pad x start position
-ypos = DISPLAY_HEIGHT - 2*pad_height
-pad = objects.GameRectangle(width=pad_width, height=pad_height, 
+PAD_SPEED = 5 # pixels per frame
+PAD_WIDTH = 100 # pixels
+PAD_HEIGHT = 25 # pixels
+xpos = DISPLAY_WIDTH // 2 - PAD_WIDTH // 2 # pad x start position
+ypos = DISPLAY_HEIGHT - 2*PAD_HEIGHT
+pad = objects.GameRectangle(width=PAD_WIDTH, height=PAD_HEIGHT, 
                             top=ypos, left=xpos, dx = 0, dy = 0,
                             fill=color.tomato)
 ellipse = objects.GameEllipse(width=DISPLAY_WIDTH, height=DISPLAY_HEIGHT, 
@@ -56,9 +57,9 @@ while running: # Main loop
         elif event.type == pygame.KEYDOWN:
             key = pygame.key.get_pressed()
             if key[pygame.K_LEFT]:
-                pad.dx = -10 # move pad 10 pixels to the left
+                pad.dx = -PAD_SPEED # move pad 10 pixels to the left
             if key[pygame.K_RIGHT]:
-                pad.dx = 10 # move pad 10 pixels to the right
+                pad.dx = PAD_SPEED # move pad 10 pixels to the right
         elif event.type == pygame.KEYUP:
             pad.dx = 0 # stop the pad
         elif event.type == pygame.MOUSEMOTION:

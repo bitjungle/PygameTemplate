@@ -20,7 +20,7 @@ DISPLAY_WIDTH = 800           # pixels
 DISPLAY_HEIGHT = 600          # pixels
 WINDOW_TITLE = 'Your Title Here'
 SCREEN_BG_COLOR = color.black # From pygame_template_colors.py
-FPS = 30                      # Frames per second
+FPS = 60                      # Frames per second
 
 # -- Preparing game window ---------------------------------------------
 # https://www.pygame.org/docs/ref/display.html?highlight=init#pygame.display.init
@@ -59,8 +59,8 @@ while c < NUM_SPIDERS:
     # Creating spiders with random start position and random speed/direction
     x = random.randint(0, 700)
     y = random.randint(0, 500)
-    dx = random.randint(-4, 4)
-    dy = random.randint(-4, 4)
+    dx = random.randint(-3, 3)
+    dy = random.randint(-3, 3)
     s = objects.GameImage(imagefile='spider.png', scale=0.1, 
                           top=y, left=x, dx=dx, dy=dy)
     if not pygame.sprite.spritecollide(s, spiders, False):
