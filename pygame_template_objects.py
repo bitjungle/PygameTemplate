@@ -5,7 +5,7 @@ This code is licensed under a GPLv3 license
 See http://www.gnu.org/licenses/gpl-3.0.html 
 '''
 import pygame
-#import math
+import math
 
 # ----------------------------------------------------------------------
 class GameObject(pygame.sprite.Sprite):
@@ -35,9 +35,12 @@ class GameObject(pygame.sprite.Sprite):
         self.dx = kwargs.get('dx', 0)
         self.dy = kwargs.get('dy', 0)
 
+        # For storing previous position, initialize with start position
+        self._top_prev, self._left_prev = self.rect.top, self.rect.left
+
     def __repr__(self):
         '''Returns object representation'''
-        return '<{:s} at {:s} x:{:n} y:{:n} dx:{:n} dy:{:n}'.format(
+        return '<{:s} at {:s} x:{:n} y:{:n} dx:{:n} dy:{:n}>'.format(
                 self.__class__.__name__,
                 hex(id(self)),
                 self.rect.top,
@@ -47,41 +50,90 @@ class GameObject(pygame.sprite.Sprite):
 
     def update(self):
         '''Move the object by dx and dy'''
-        self.rect = self.rect.move((self.dx, self.dy))
+        self._top_prev, self._left_prev = self.rect.top, self.rect.left
+        self.rect.move_ip((self.dx, self.dy))
+
+    def rewind(self):
+        '''Move object back to previous location'''
+        self.rect.top, self.rect.left = self._top_prev, self._left_prev
+
+    def transfer_momentum(self, obj):
+        '''Transfer momentum between two colliding objects'''
+        # TODO Just a placeholder implementation for now
+        self.dx, self.dy, obj.dx, obj.dy = -obj.dx, obj.dy, self.dx, -self.dy
+
+    def get_tangent(self):
+        '''Calculate and return tangent from dy/dx'''
+        return math.atan2(-self.dy, self.dx)
+
+    def get_angle(self):
+        '''Calculate and return object angle of direction'''
+        rad = self.get_tangent() % (2*math.pi)
+        return (rad, 180*rad/math.pi)
+
+    def get_bounce_angle(self):
+        '''Calculate and return bounce angle from tangent'''
+        return 2*self.get_tangent() - self.get_angle()
+
+    def get_speed(self):
+        '''Calculate and return speed from dx and dy using Pythagoras'''
+        return math.hypot(self.dx, self.dy)
 
     def collide(self, group, **kwargs):
         '''Checks if object collide with object in another sprite group
 
         Args:
-            group  (sprite.Group):
-            dokill (bool):
-            ratio  (float):
+            group  (sprite.Group): Find collision with group member
+            dokill (bool): True will remove all sprites that collide from group
+            ratio  (float): Scale rects/circles to ratio
         '''
         dokill = kwargs.get('dokill', False)
         ratio = kwargs.get('ratio', 1.0)
         circle = kwargs.get('circle', False)
 
         if circle:
-            col = pygame.sprite.spritecollide(self, group, dokill, 
-                                              pygame.sprite.collide_circle_ratio(ratio))
+            hitlist = pygame.sprite.spritecollide(self, group, dokill, 
+                            pygame.sprite.collide_circle_ratio(ratio))
         else:
-            col = pygame.sprite.spritecollide(self, group, dokill, 
-                                              pygame.sprite.collide_rect_ratio(ratio))
+            hitlist = pygame.sprite.spritecollide(self, group, dokill, 
+                            pygame.sprite.collide_rect_ratio(ratio))
 
-        if col:
-            print(self, ' collision with ', col[0])
-            # TODO: Move back to avoid sticky objects
-            # TODO: calculate correct angle?
-            self.dx, self.dy, col[0].dx, col[0].dy = col[0].dy, col[0].dx, self.dy, self.dx
+        return hitlist
 
-    def collide_window_edge(self, width, height):
+    def collide_vert_window_edge(self, width):
+        '''Returns True if collision with vertical window edges is detected
+        
+        Args:
+            width (int): Window width
+        '''
+        collision = False
         if self.rect.left < 0 or self.rect.right > width:
-            self.dx *= -1
-        if self.rect.top < 0 or self.rect.bottom > height:
-            self.dy *= -1
-        # Move back to avoid sticky objects
-        self.rect = self.rect.move((2*self.dx, 2*self.dy))
+            collision = True
+            if self.rect.left < 0:
+                self.rect.left = 0
+            elif self.rect.right > width:
+                self.rect.right = width
+            else:
+                pass
+        return collision
 
+    def collide_horiz_window_edge(self, height):
+        '''Returns True if collision with horizontal window edges is detected
+        
+        Args:
+            height (int): Window height
+        '''
+        collision = False
+        if self.rect.top < 0 or self.rect.bottom > height:
+            collision = True
+            if self.rect.top < 0:
+                self.rect.top = 0
+            elif self.rect.bottom > height:
+                self.rect.bottom = height
+            else:
+                pass
+        return collision
+        
     def move_to(self, **kwargs):
         '''Move the object to x and y'''
         if kwargs.get('x', None): 
@@ -259,8 +311,8 @@ class GameImage(GameObject):
             self.scale(int(self.rect.width * kwargs.get('scale')), 
                        int(self.rect.height * kwargs.get('scale')))
 
-        self.rect.top = kwargs.get('top', 0)   # must set after loading image
-        self.rect.left = kwargs.get('left', 0) # must set after loading image
+        self.rect.top = kwargs.get('top', 0)
+        self.rect.left = kwargs.get('left', 0)
 
     def scale(self, width, height):
         '''Resizes the object Surface to a new resolution, use original image.'''

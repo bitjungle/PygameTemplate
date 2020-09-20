@@ -43,16 +43,14 @@ while c < NUM_DISCS:
     y = random.randint(0, 500)
     dx = random.randint(-2, 2)
     dy = random.randint(-2, 2)
-    d = objects.GameCircle(radius=25, 
-                           fill=(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)), 
-                           top=y, left=x,
-                           dx=dx, dy=dy)
-    if not pygame.sprite.spritecollide(d, discs, False):
+    color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+    d = objects.GameCircle(radius=25, fill=color, top=y, left=x, dx=dx, dy=dy)
+    if not d.collide(discs):
         # Making sure that we don't create overlapping discs
         discs.add(d)
         c += 1
 
-NUM_SPIDERS = 25
+NUM_SPIDERS = 10
 spiders = pygame.sprite.Group()
 c = 0
 while c < NUM_SPIDERS:
@@ -61,9 +59,8 @@ while c < NUM_SPIDERS:
     y = random.randint(0, 500)
     dx = random.randint(-3, 3)
     dy = random.randint(-3, 3)
-    s = objects.GameImage(imagefile='spider.png', scale=0.1, 
-                          top=y, left=x, dx=dx, dy=dy)
-    if not pygame.sprite.spritecollide(s, spiders, False):
+    s = objects.GameImage(imagefile='spider.png', scale=0.1, top=y, left=x, dx=dx, dy=dy)
+    if not s.collide(spiders):
         # Making sure that we don't create overlapping spiders
         spiders.add(s)
         c += 1
@@ -89,16 +86,33 @@ while running: # Main loop
 
     # -- Implement game code here --------------------------------------
     for d in discs: # Loop through all disks to find collisions
-        d.collide_window_edge(DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        if d.collide_horiz_window_edge(DISPLAY_HEIGHT):
+            d.dy *= -1 # Hit top/bottom window edge, flip horiz direction
+        if d.collide_vert_window_edge(DISPLAY_WIDTH):
+            d.dx *= -1 # Hit left/right window edge, flip vert direction
         discs.remove(d)  # remove disc from group
         d.collide(discs, circle=True) # check for collision with objects in group
+        disc_hits = d.collide(discs, circle=True) # check for collision with objects in group
+        if disc_hits:
+            print(d.get_angle(), disc_hits[0].get_angle())
+            d.rewind()
+            disc_hits[0].rewind()
+            d.transfer_momentum(disc_hits[0])
         discs.add(d)     # add disc back into group
+    discs.update()
+
     for s in spiders: # Loop through all spiders to find collisions
-        s.collide_window_edge(DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        if s.collide_horiz_window_edge(DISPLAY_HEIGHT):
+            s.dy *= -1 # Hit top/bottom window edge, flip horiz direction
+        if s.collide_vert_window_edge(DISPLAY_WIDTH):
+            s.dx *= -1 # Hit left/right window edge, flip vert direction
         spiders.remove(s)  # remove spider from group
-        s.collide(spiders, ratio=0.6) # check for collision with objects in group
+        spider_hits = s.collide(spiders, ratio=0.6) # check for collision with objects in group
+        if spider_hits:
+            print(spider_hits[0])
         spiders.add(s)     # add spider back into group
-        
+    spiders.update()
+
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit

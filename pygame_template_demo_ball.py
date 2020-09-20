@@ -19,7 +19,7 @@ import pygame_template_objects as objects
 DISPLAY_WIDTH = 800   # pixels
 DISPLAY_HEIGHT = 600  # pixels
 WINDOW_TITLE = 'Your Title Here'
-SCREEN_BG_COLOR = color.lawngreen # RGB color code
+SCREEN_BG_COLOR = pygame.Color(196, 225, 178) # RGB color code
 FPS = 60 # Frames per second
 
 # -- Preparing game window ---------------------------------------------
@@ -35,13 +35,17 @@ pygame.display.set_caption(WINDOW_TITLE)
 running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
+
 # Making a moving ball 
 r = 20 # ball radius (pixels)
-x = 200 # ball x coordinate starting position (pixels)
-y = 100 # ball x coordinate starting position (pixels)
+x = (DISPLAY_WIDTH // 2) - r  # x coordinate starting position (pixels)
+y = (DISPLAY_HEIGHT // 2) - r # y coordinate starting position (pixels)
 ball = objects.GameCircle(radius=r, fill=color.indianred, 
                           top=y, left=x,
-                          dx=3, dy=1)
+                          dx=3, dy=2)
+
+# Preparing the background image
+unit_circle = objects.GameImage(imagefile='unit-circle.png')
 
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
@@ -63,14 +67,22 @@ while running: # Main loop
     screen.fill(SCREEN_BG_COLOR)  # Blanking the screen
 
     # -- Implement game code here --------------------------------------
-    # Move the demo ball by dx and dy pixels
+    # Move the ball by dx and dy pixels
     ball.update()
     # Check for collision with screen edges
-    ball.collide_window_edge(DISPLAY_WIDTH, DISPLAY_HEIGHT)
+    if ball.collide_horiz_window_edge(DISPLAY_HEIGHT):
+        ang = ball.get_angle()
+        print("Hit angle rad:", ang[0], 'deg:', ang[1])
+        ball.dy *= -1 # Hit top/bottom window edge, flip horizontal direction
+    if ball.collide_vert_window_edge(DISPLAY_WIDTH):
+        ang = ball.get_angle()
+        print("Hit angle rad:", ang[0], 'deg:', ang[1])
+        ball.dx *= -1 # Hit left/right window edge, flip vertical direction
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
     # https://www.pygame.org/docs/ref/surface.html?highlight=blit#pygame.Surface.blit
+    screen.blit(unit_circle.image, unit_circle.rect)
     screen.blit(ball.image, ball.rect)
 
     # Update the full display Surface to the screen

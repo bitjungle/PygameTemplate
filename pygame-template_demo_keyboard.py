@@ -75,9 +75,8 @@ while running: # Main loop
     # -- Implement game code here --------------------------------------
     pad.update() # Move the pad
 
-    if pad.rect.left == 0 or pad.rect.right > DISPLAY_WIDTH: 
-        # Stop pad at screen edge
-        pad.dx = 0
+    if pad.collide_vert_window_edge(DISPLAY_WIDTH): 
+        pad.dx = 0 # Stop pad at screen edge
 
     # -- Drawing game objects ------------------------------------------
     # screen.blit() your game objects here
