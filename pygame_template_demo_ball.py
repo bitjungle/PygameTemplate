@@ -72,11 +72,11 @@ while running: # Main loop
     # Check for collision with screen edges
     if ball.collide_horiz_window_edge(DISPLAY_HEIGHT):
         ang = ball.get_angle()
-        print("Hit angle rad:", ang[0], 'deg:', ang[1])
+        print('hit angle rad:', round(ang[0], 4), 'deg:', round(ang[1]))
         ball.dy *= -1 # Hit top/bottom window edge, flip horizontal direction
     if ball.collide_vert_window_edge(DISPLAY_WIDTH):
         ang = ball.get_angle()
-        print("Hit angle rad:", ang[0], 'deg:', ang[1])
+        print('hit angle rad:', round(ang[0], 4), 'deg:', round(ang[1]))
         ball.dx *= -1 # Hit left/right window edge, flip vertical direction
 
     # -- Drawing game objects ------------------------------------------

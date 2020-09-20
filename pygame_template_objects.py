@@ -16,6 +16,7 @@ class GameObject(pygame.sprite.Sprite):
     Args:
         dx (int): Number of pixels to move object in x direction
         dy (int): Number of pixels to move object in y direction
+        mass (float): Object mass (optional, default is 1.0)
 
     Attributes:
         image (Surface): object for representing images
@@ -38,6 +39,8 @@ class GameObject(pygame.sprite.Sprite):
         # For storing previous position, initialize with start position
         self._top_prev, self._left_prev = self.rect.top, self.rect.left
 
+        self.m = kwargs.get('mass', 1.0)
+
     def __repr__(self):
         '''Returns object representation'''
         return '<{:s} at {:s} x:{:n} y:{:n} dx:{:n} dy:{:n}>'.format(
@@ -59,25 +62,46 @@ class GameObject(pygame.sprite.Sprite):
 
     def transfer_momentum(self, obj):
         '''Transfer momentum between two colliding objects'''
-        # TODO Just a placeholder implementation for now
-        self.dx, self.dy, obj.dx, obj.dy = -obj.dx, obj.dy, self.dx, -self.dy
+        # elastic collision
+        # https://en.wikipedia.org/wiki/Elastic_collision#Two-dimensional_collision_with_two_moving_objects
+
+        v1 = self.get_speed()
+        a1 = self.get_angle()[0]
+        m1 = self.m 
+
+        v2 = obj.get_speed()
+        a2 = obj.get_angle()[0]
+        m2 = obj.m
+
+        phi = 2*math.pi - abs(a1 - a2) # contact angle
+
+        z1 = (v1*math.cos(a1 - phi)*(m1 - m2) + 2*m2*v2*math.cos(a2 - phi)) / (m1 + m2)
+        self.dx = z1*math.cos(phi) + v1*math.sin(a1 - phi)*math.cos(phi + math.pi/2)
+        self.dy = z1*math.sin(phi) + v1*math.sin(a1 - phi)*math.sin(phi + math.pi/2)
+
+        z2 = (v2*math.cos(a2 - phi)*(m2 - m1) + 2*m1*v1*math.cos(a1 - phi)) / (m2 + m1)
+        obj.dx = z2*math.cos(phi) + v2*math.sin(a2 - phi)*math.cos(phi + math.pi/2)
+        obj.dy = z2*math.sin(phi) + v2*math.sin(a2 - phi)*math.sin(phi + math.pi/2)
 
     def get_tangent(self):
         '''Calculate and return tangent from dy/dx'''
-        return math.atan2(-self.dy, self.dx)
+        return math.atan2(-self.dy, self.dx) # defines positive y upward
 
     def get_angle(self):
         '''Calculate and return object angle of direction'''
         rad = self.get_tangent() % (2*math.pi)
         return (rad, 180*rad/math.pi)
 
-    def get_bounce_angle(self):
-        '''Calculate and return bounce angle from tangent'''
-        return 2*self.get_tangent() - self.get_angle()
-
     def get_speed(self):
         '''Calculate and return speed from dx and dy using Pythagoras'''
         return math.hypot(self.dx, self.dy)
+
+    def calc_dxdy(self):
+        a = self.get_angle()
+        v = self.get_speed()
+        dx = v*math.cos(a[0])
+        dy = -v*math.sin(a[0]) # positive y is downward
+        return (dx, dy)
 
     def collide(self, group, **kwargs):
         '''Checks if object collide with object in another sprite group

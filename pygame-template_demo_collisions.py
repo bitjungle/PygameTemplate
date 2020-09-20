@@ -35,7 +35,7 @@ pygame.display.set_caption(WINDOW_TITLE)
 running = True # The program will run as long as this variable is true
 
 # -- Preparing game objects --------------------------------------------
-NUM_DISCS = 5
+NUM_DISCS = 6
 discs = pygame.sprite.Group()
 c = 0
 while c < NUM_DISCS:
@@ -50,7 +50,7 @@ while c < NUM_DISCS:
         discs.add(d)
         c += 1
 
-NUM_SPIDERS = 10
+NUM_SPIDERS = 25
 spiders = pygame.sprite.Group()
 c = 0
 while c < NUM_SPIDERS:
@@ -94,7 +94,6 @@ while running: # Main loop
         d.collide(discs, circle=True) # check for collision with objects in group
         disc_hits = d.collide(discs, circle=True) # check for collision with objects in group
         if disc_hits:
-            print(d.get_angle(), disc_hits[0].get_angle())
             d.rewind()
             disc_hits[0].rewind()
             d.transfer_momentum(disc_hits[0])
@@ -109,7 +108,9 @@ while running: # Main loop
         spiders.remove(s)  # remove spider from group
         spider_hits = s.collide(spiders, ratio=0.6) # check for collision with objects in group
         if spider_hits:
-            print(spider_hits[0])
+            s.rewind()
+            spider_hits[0].rewind()
+            s.transfer_momentum(spider_hits[0])
         spiders.add(s)     # add spider back into group
     spiders.update()
 
