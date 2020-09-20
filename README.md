@@ -4,7 +4,7 @@
 
 Install the latest version of Pygame with pip:
 
-    pip install pygame==2.0.0.dev10
+    pip install pygame==2.0.0.dev12
 
 Check for the latest release of Pygame 2 [here](https://github.com/pygame/pygame/releases), and read the documentation [here](https://www.pygame.org/docs/).
 
