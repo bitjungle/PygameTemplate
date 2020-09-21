@@ -8,7 +8,7 @@ See http://www.gnu.org/licenses/gpl-3.0.html
 '''
 import pygame
 import sys
-#import math   # Un-comment if needed
+import math   # Un-comment if needed
 #import random # Un-comment if needed
 
 # -- Game classes ------------------------------------------------------
@@ -47,6 +47,9 @@ ball = objects.GameCircle(radius=r, fill=color.indianred,
 # Preparing the background image
 unit_circle = objects.GameImage(imagefile='unit-circle.png')
 
+def print_hit_angle(a):
+    print('hit angle rad:', round(a, 4), 'deg:', round(180.0*a/math.pi))
+
 while running: # Main loop
     for event in pygame.event.get(): # https://www.pygame.org/docs/ref/event.html
         if event.type == pygame.QUIT: 
@@ -71,12 +74,10 @@ while running: # Main loop
     ball.update()
     # Check for collision with screen edges
     if ball.collide_horiz_window_edge(DISPLAY_HEIGHT):
-        ang = ball.get_angle()
-        print('hit angle rad:', round(ang[0], 4), 'deg:', round(ang[1]))
+        print_hit_angle(ball.get_angle())
         ball.dy *= -1 # Hit top/bottom window edge, flip horizontal direction
     if ball.collide_vert_window_edge(DISPLAY_WIDTH):
-        ang = ball.get_angle()
-        print('hit angle rad:', round(ang[0], 4), 'deg:', round(ang[1]))
+        print_hit_angle(ball.get_angle())
         ball.dx *= -1 # Hit left/right window edge, flip vertical direction
 
     # -- Drawing game objects ------------------------------------------

@@ -65,15 +65,23 @@ class GameObject(pygame.sprite.Sprite):
         # elastic collision
         # https://en.wikipedia.org/wiki/Elastic_collision#Two-dimensional_collision_with_two_moving_objects
 
+        # Object 1 (self) speed, angle and mass
         v1 = self.get_speed()
-        a1 = self.get_angle()[0]
+        a1 = self.get_angle()
         m1 = self.m 
 
+        # Object 2 (from method parameter) speed, angle and mass
         v2 = obj.get_speed()
-        a2 = obj.get_angle()[0]
+        a2 = obj.get_angle()
         m2 = obj.m
 
-        phi = 2*math.pi - abs(a1 - a2) # contact angle
+        # contact angle
+        phi = math.pi + math.atan2((self.rect.centery - obj.rect.centery), 
+                                   (self.rect.centerx - obj.rect.centerx))
+
+        #for debugging
+        #rad2deg = lambda a: a*180.0/math.pi
+        #print('a1:', rad2deg(a1), 'a2', rad2deg(a2), 'phi:', rad2deg(phi))
 
         z1 = (v1*math.cos(a1 - phi)*(m1 - m2) + 2*m2*v2*math.cos(a2 - phi)) / (m1 + m2)
         self.dx = z1*math.cos(phi) + v1*math.sin(a1 - phi)*math.cos(phi + math.pi/2)
@@ -89,19 +97,18 @@ class GameObject(pygame.sprite.Sprite):
 
     def get_angle(self):
         '''Calculate and return object angle of direction'''
-        rad = self.get_tangent() % (2*math.pi)
-        return (rad, 180*rad/math.pi)
+        # calculate the tangent, convert to the interval 0 to 2*pi
+        return self.get_tangent() % (2*math.pi)
 
     def get_speed(self):
-        '''Calculate and return speed from dx and dy using Pythagoras'''
+        '''Calculate and return speed from object dx and dy using Pythagoras'''
         return math.hypot(self.dx, self.dy)
 
     def calc_dxdy(self):
+        '''Calculate and return dx and dy from object speed and direction'''
         a = self.get_angle()
         v = self.get_speed()
-        dx = v*math.cos(a[0])
-        dy = -v*math.sin(a[0]) # positive y is downward
-        return (dx, dy)
+        return (v*math.cos(a), -v*math.sin(a)) # positive y is downward
 
     def collide(self, group, **kwargs):
         '''Checks if object collide with object in another sprite group
@@ -158,13 +165,6 @@ class GameObject(pygame.sprite.Sprite):
                 pass
         return collision
         
-    def move_to(self, **kwargs):
-        '''Move the object to x and y'''
-        if kwargs.get('x', None): 
-            self.rect.centerx = kwargs.get('x')
-        if kwargs.get('y', None): 
-            self.rect.centery = kwargs.get('y')
-
 # ----------------------------------------------------------------------
 class GameRectangle(GameObject):
     '''Rectangular object
