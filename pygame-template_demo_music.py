@@ -1,6 +1,6 @@
-''' Pygame template
+''' Pygame template demo
 
-A pygame template to get my students quickly up and running.
+A pygame template demo - playing sound
 
 Copyright (C) 2020 BITJUNGLE Rune Mathisen
 This code is licensed under a GPLv3 license 
@@ -18,7 +18,7 @@ import pygame_template_objects as objects
 # -- Game window properties --------------------------------------------
 DISPLAY_WIDTH = 800           # pixels
 DISPLAY_HEIGHT = 600          # pixels
-WINDOW_TITLE = 'Your Title Here'
+WINDOW_TITLE = 'Playing sound'
 SCREEN_BG_COLOR = color.darkred # From pygame_template_colors.py
 FPS = 60                      # Frames per second
 

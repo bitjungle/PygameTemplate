@@ -18,7 +18,7 @@ import pygame_template_objects as objects
 # -- Game window properties --------------------------------------------
 DISPLAY_WIDTH = 800           # pixels
 DISPLAY_HEIGHT = 600          # pixels
-WINDOW_TITLE = 'Your Title Here'
+WINDOW_TITLE = 'A moving image'
 SCREEN_BG_COLOR = color.black # From pygame_template_colors.py
 FPS = 60                      # Frames per second
 

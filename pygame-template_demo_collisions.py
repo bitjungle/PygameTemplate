@@ -18,7 +18,7 @@ import pygame_template_objects as objects
 # -- Game window properties --------------------------------------------
 DISPLAY_WIDTH = 800           # pixels
 DISPLAY_HEIGHT = 600          # pixels
-WINDOW_TITLE = 'Your Title Here'
+WINDOW_TITLE = 'Detecting and handling collisions'
 SCREEN_BG_COLOR = color.black # From pygame_template_colors.py
 FPS = 60                      # Frames per second
 
@@ -39,14 +39,14 @@ NUM_DISCS = 6
 discs = pygame.sprite.Group()
 c = 0
 while c < NUM_DISCS:
-    x = random.randint(0, 700)
-    y = random.randint(0, 500)
-    dx = random.randint(-2, 2)
-    dy = random.randint(-2, 2)
-    color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-    d = objects.GameCircle(radius=25, fill=color, top=y, left=x, dx=dx, dy=dy)
-    if not d.collide(discs):
-        # Making sure that we don't create overlapping discs
+    x = random.randint(0, 700) # x start pos
+    y = random.randint(0, 500) # y start pos
+    dx = random.randint(-2, 2) # initial speed in x direction
+    dy = random.randint(-2, 2) # initial speed in y direction
+    m = random.randint(1, 10)  # mass
+    color = (m*25, m*25, 255)  # color is a function of mass (white is most massive)
+    d = objects.GameCircle(radius=25, fill=color, top=y, left=x, dx=dx, dy=dy, mass=m)
+    if not d.collide(discs): # Making sure that we don't create overlapping discs
         discs.add(d)
         c += 1
 
@@ -55,13 +55,12 @@ spiders = pygame.sprite.Group()
 c = 0
 while c < NUM_SPIDERS:
     # Creating spiders with random start position and random speed/direction
-    x = random.randint(0, 700)
-    y = random.randint(0, 500)
-    dx = random.randint(-3, 3)
-    dy = random.randint(-3, 3)
+    x = random.randint(0, 700) # x start pos
+    y = random.randint(0, 500) # y start pos
+    dx = random.randint(-3, 3) # initial speed in x direction
+    dy = random.randint(-3, 3) # initial speed in y direction
     s = objects.GameImage(imagefile='spider.png', scale=0.1, top=y, left=x, dx=dx, dy=dy)
-    if not s.collide(spiders):
-        # Making sure that we don't create overlapping spiders
+    if not s.collide(spiders): # Making sure that we don't create overlapping spiders
         spiders.add(s)
         c += 1
 

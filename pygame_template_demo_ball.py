@@ -1,6 +1,6 @@
 ''' Pygame template demo
 
-A pygame template demo - a moving ball
+A pygame template demo - a bouncing ball
 
 Copyright (C) 2020 BITJUNGLE Rune Mathisen
 This code is licensed under a GPLv3 license 
@@ -18,7 +18,7 @@ import pygame_template_objects as objects
 # -- Game window properties --------------------------------------------
 DISPLAY_WIDTH = 800   # pixels
 DISPLAY_HEIGHT = 600  # pixels
-WINDOW_TITLE = 'Your Title Here'
+WINDOW_TITLE = 'A bouncing ball'
 SCREEN_BG_COLOR = pygame.Color(196, 225, 178) # RGB color code
 FPS = 60 # Frames per second
 
